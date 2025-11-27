@@ -64,7 +64,7 @@ export default function ExitIntent({ maxBenefit = 18000 }: ExitIntentProps) {
       document.addEventListener('mouseleave', handleMouseLeave)
       window.addEventListener('scroll', handleScroll, { passive: true })
       document.addEventListener('visibilitychange', handleVisibilityChange)
-    }, 9000)
+    }, 11000)
 
     return () => {
       clearTimeout(timeout)

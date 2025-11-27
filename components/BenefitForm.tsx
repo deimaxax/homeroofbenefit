@@ -2,7 +2,7 @@
 
 "use client"
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Input } from "@/components/ui/input"
 import { CheckCircle2, ArrowRight, ArrowLeft, Clock, Users, Shield } from 'lucide-react'
@@ -33,6 +33,9 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [showError, setShowError] = useState(false)
   const [isShaking, setIsShaking] = useState(false)
+
+  // Ref for scroll control
+  const formContainerRef = useRef<HTMLDivElement>(null)
 
   const totalSteps = 2
   const nextStep = () => setStep(s => s + 1)
@@ -158,9 +161,21 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
       if (!response.ok || !result.success) {
         throw new Error(result.error || 'Failed to submit')
       }
+      
+      // Blur active input to prevent mobile keyboard scroll
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
+      
       setIsSubmitted(true)
     } catch (error) {
       console.error('Submission error:', error)
+      
+      // Blur active input to prevent mobile keyboard scroll
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
+      
       setIsSubmitted(true)
     } finally {
       setIsSubmitting(false)
@@ -174,7 +189,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
     const phoneDisplay = '(479) 844-1144'
     const phoneTel = '+14798441144'
     return (
-      <div className="text-center py-8">
+      <div ref={formContainerRef} className="text-center py-8">
         <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-8 h-8 text-emerald-600" />
         </div>
@@ -207,7 +222,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   // ═══════════════════════════════════════════════════════════════
   if (isEligible && step === 3) {
     return (
-      <div className="w-full">
+      <div ref={formContainerRef} className="w-full">
         {/* Progress Bar - 85% Complete */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
@@ -371,7 +386,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   // MAIN FORM STEPS
   // ═══════════════════════════════════════════════════════════════
   return (
-    <div className="w-full">
+    <div ref={formContainerRef} className="w-full">
       {/* Premium Progress Indicator */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
