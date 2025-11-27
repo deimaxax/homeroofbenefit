@@ -179,34 +179,35 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   if (isEligible && step === 3) {
     return (
       <div className="w-full">
-        {/* SUCCESS HEADER - Big impact */}
-        <div className="text-center mb-5">
-          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full text-sm font-semibold mb-3">
+        {/* Success Badge */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-bold mb-4">
             <CheckCircle2 className="w-4 h-4" />
-            Pre-Qualified
+            You Pre-Qualify!
           </div>
-          <h2 className="text-2xl font-black text-slate-900 mb-2">
-            You May Qualify For
-          </h2>
-          <div className="bg-emerald-600 text-white rounded-xl p-4 mb-2">
-            <p className="text-3xl font-black">
+          
+          {/* Benefit Amount - Hero */}
+          <div className="bg-gradient-to-br from-emerald-600 to-teal-600 text-white rounded-2xl p-6 shadow-xl shadow-emerald-600/20">
+            <p className="text-sm opacity-90 mb-1">Your Estimated Benefit</p>
+            <p className="text-4xl sm:text-5xl font-black">
               ${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}
             </p>
-            <p className="text-emerald-100 text-sm mt-1">in roof restoration benefits</p>
-          </div>
-          <p className="text-xs text-slate-500">A licensed contractor will verify your exact amount</p>
-        </div>
-
-        {/* URGENCY - Scarcity */}
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 flex items-center gap-2">
-          <Clock className="w-5 h-5 text-amber-600 flex-shrink-0" />
-          <div className="text-sm">
-            <span className="font-bold text-amber-800">ONLY {spotsLeft} SLOTS LEFT</span>
-            <span className="text-amber-700"> for this Week's Exclusive DRONE Assessment.</span>
+            <p className="text-emerald-100 text-sm mt-2">in roof restoration coverage</p>
           </div>
         </div>
 
-        {/* Clean form */}
+        {/* Urgency Badge - Inline */}
+        <div className="flex items-center justify-center gap-2 mb-5">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+          </span>
+          <span className="text-sm text-amber-700 font-medium">
+            Only <span className="font-bold">{spotsLeft} spots</span> left this week
+          </span>
+        </div>
+
+        {/* Clean Form */}
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <Input 
@@ -216,7 +217,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                 setFormData(prev => ({ ...prev, name: e.target.value }))
                 if (errors.name) setErrors(prev => ({ ...prev, name: '' }))
               }}
-              className={`h-13 text-base bg-white ${errors.name ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200'}`}
+              className={`h-14 text-base bg-white rounded-xl ${errors.name ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20'}`}
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
@@ -231,7 +232,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                 setFormData(prev => ({ ...prev, phone: formatPhone(e.target.value) }))
                 if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }))
               }}
-              className={`h-13 text-base bg-white ${errors.phone ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200'}`}
+              className={`h-14 text-base bg-white rounded-xl ${errors.phone ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20'}`}
             />
             {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
           </div>
@@ -245,15 +246,20 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                 setFormData(prev => ({ ...prev, zipCode: formatZip(e.target.value) }))
                 if (errors.zipCode) setErrors(prev => ({ ...prev, zipCode: '' }))
               }}
-              className={`h-13 text-base bg-white ${errors.zipCode ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200'}`}
+              className={`h-14 text-base bg-white rounded-xl ${errors.zipCode ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20'}`}
             />
             {errors.zipCode && <p className="text-red-500 text-xs mt-1">{errors.zipCode}</p>}
           </div>
 
-          {/* TCPA Consent */}
-          <label className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer border-2 transition-colors ${
-            consent ? 'bg-emerald-50 border-emerald-200' : 'bg-slate-50 border-transparent'
+          {/* TCPA Consent - Cleaner */}
+          <label className={`flex items-start gap-3 p-4 rounded-xl cursor-pointer border-2 transition-all ${
+            consent ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200 hover:border-slate-300'
           }`}>
+            <div className={`w-5 h-5 mt-0.5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+              consent ? 'bg-emerald-600 border-emerald-600' : 'border-slate-300'
+            }`}>
+              {consent && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+            </div>
             <input
               type="checkbox"
               checked={consent}
@@ -261,12 +267,12 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                 setConsent(e.target.checked)
                 if (errors.consent) setErrors(prev => ({ ...prev, consent: '' }))
               }}
-              className="w-5 h-5 mt-0.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+              className="sr-only"
             />
-            <span className="text-[10px] text-slate-500 leading-relaxed">
-              I consent to receive calls/texts from Housing Benefit Check and its 
-              <a href="/partners" className="underline mx-0.5 hover:text-slate-700">contractors</a> 
-              at this number via automated technology. Not required for service. 
+            <span className="text-[11px] text-slate-500 leading-relaxed">
+              I agree to receive calls/texts from Housing Benefit Check and 
+              <a href="/partners" className="underline mx-0.5 hover:text-slate-700">partners</a> 
+              at this number. Consent not required to purchase. 
               <a href="/privacy" className="underline mx-0.5 hover:text-slate-700">Privacy</a> • 
               <a href="/terms" className="underline mx-0.5 hover:text-slate-700">Terms</a>
             </span>
@@ -276,7 +282,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-400 text-white font-bold text-lg rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/40"
+            className="w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-slate-400 disabled:to-slate-400 text-white font-bold text-lg rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2">
@@ -284,27 +290,24 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
-                Securing Your Spot...
+                Confirming...
               </span>
             ) : (
-              <>CONFIRM MY $0$ PAYOUT ELIGIBILITY <ArrowRight className="w-5 h-5" /></>
+              <>Get My Free Assessment <ArrowRight className="w-5 h-5" /></>
             )}
           </button>
 
-          {/* Trust footer */}
-          <div className="flex items-center justify-center gap-4 pt-2">
-            <div className="flex items-center gap-1 text-[11px] text-slate-400">
-              <Shield className="w-3.5 h-3.5" />
-              <span>Secure</span>
-            </div>
-            <div className="flex items-center gap-1 text-[11px] text-slate-400">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>Free service</span>
-            </div>
-            <div className="flex items-center gap-1 text-[11px] text-slate-400">
-              <Users className="w-3.5 h-3.5" />
-              <span>1,200+ helped</span>
-            </div>
+          {/* Trust footer - minimal */}
+          <div className="flex items-center justify-center gap-5 pt-3 text-xs text-slate-400">
+            <span className="flex items-center gap-1">
+              <Shield className="w-3.5 h-3.5" /> Secure
+            </span>
+            <span className="flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Free
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" /> 15min response
+            </span>
           </div>
         </form>
       </div>
@@ -323,18 +326,18 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   // ═══════════════════════════════════════════════════════════════
   return (
     <div className="w-full">
-      {/* URGENCY BAR - Limited spots */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-2.5 mb-4 flex items-center justify-center gap-2">
-        <Clock className="w-4 h-4 text-amber-600" />
-        <span className="text-sm text-amber-800 font-medium">
-          <span className="font-bold">ONLY {spotsLeft} SLOTS LEFT</span> this week in {displayCity}
-        </span>
-      </div>
-
-      {/* Simple progress */}
-      <div className="flex items-center gap-2 mb-5">
-        <div className={`h-1.5 flex-1 rounded-full transition-colors ${step >= 1 ? 'bg-emerald-500' : 'bg-slate-200'}`} />
-        <div className={`h-1.5 flex-1 rounded-full transition-colors ${step >= 2 ? 'bg-emerald-500' : 'bg-slate-200'}`} />
+      {/* Premium Progress Indicator */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+            step >= 1 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
+          }`}>1</div>
+          <div className={`w-12 h-1 rounded-full transition-all ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-200'}`} />
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+            step >= 2 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
+          }`}>2</div>
+        </div>
+        <span className="text-xs text-slate-400 font-medium">Step {step} of 2</span>
       </div>
 
       <AnimatePresence mode="wait">
@@ -348,22 +351,24 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.15 }}
           >
-            <h3 className="text-xl font-bold text-slate-900 mb-1">2-STEP QUIZ: DOES INSURANCE OWE YOU A NEW ROOF?</h3>
-            <p className="text-slate-500 text-sm mb-4">Most {displayCity} homeowners qualify for $14k-$25k</p>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">
+              Does Insurance Owe You a New Roof?
+            </h3>
+            <p className="text-slate-500 text-sm mb-5">Select all that apply to your home</p>
             
-            <div className="space-y-2 mb-4">
+            <div className="space-y-2.5 mb-5">
               {[
-                { id: 'storm-damage', text: "Storm or hail damage", popular: true },
-                { id: 'old-roof', text: "Roof is 10+ years old" },
-                { id: 'leaks', text: "Leaks or water stains" },
-                { id: 'high-bills', text: "High energy bills" }
+                { id: 'storm-damage', text: "Storm or hail damage", icon: "⛈️", popular: true },
+                { id: 'old-roof', text: "Roof is 10+ years old", icon: "🏠" },
+                { id: 'leaks', text: "Leaks or water stains", icon: "💧" },
+                { id: 'high-bills', text: "High energy bills", icon: "⚡" }
               ].map((item) => (
                 <label
                   key={item.id}
-                  className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all ${
                     propertyIssues.includes(item.id)
-                      ? 'bg-emerald-600 border-emerald-600 text-white'
-                      : 'bg-white border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50'
+                      ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500/20'
+                      : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
                   <input 
@@ -372,45 +377,57 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                     onChange={() => toggleIssue(item.id)}
                     className="sr-only" 
                   />
-                  <span className="font-medium">{item.text}</span>
+                  <span className="text-xl">{item.icon}</span>
+                  <span className={`font-semibold flex-1 ${propertyIssues.includes(item.id) ? 'text-emerald-900' : 'text-slate-700'}`}>
+                    {item.text}
+                  </span>
                   {'popular' in item && item.popular && !propertyIssues.includes(item.id) && (
-                    <span className="ml-2 text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-semibold">COMMON</span>
+                    <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-bold uppercase">Most Common</span>
                   )}
-                  {propertyIssues.includes(item.id) && (
-                    <CheckCircle2 className="w-5 h-5 ml-auto" />
-                  )}
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                    propertyIssues.includes(item.id)
+                      ? 'bg-emerald-600 border-emerald-600'
+                      : 'border-slate-300'
+                  }`}>
+                    {propertyIssues.includes(item.id) && (
+                      <CheckCircle2 className="w-4 h-4 text-white" />
+                    )}
+                  </div>
                 </label>
               ))}
             </div>
 
-            {/* LIVE ESTIMATE - Value anchor */}
-            <div className={`rounded-lg p-4 mb-4 text-center transition-all ${
+            {/* Live Estimate Card */}
+            <div className={`rounded-2xl p-5 mb-5 text-center transition-all ${
               propertyIssues.length > 0 
-                ? 'bg-emerald-600 text-white' 
+                ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-600/25' 
                 : 'bg-slate-100 text-slate-500'
             }`}>
               {propertyIssues.length > 0 ? (
                 <>
-                  <p className="text-sm opacity-90">Your estimated benefit:</p>
-                  <p className="text-2xl font-black">${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}</p>
-                  <p className="text-xs opacity-75 mt-1">vs. $12,000-$18,000 typical roof cost</p>
+                  <p className="text-sm opacity-90 mb-1">Your estimated benefit</p>
+                  <p className="text-3xl sm:text-4xl font-black">${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}</p>
+                  <p className="text-xs opacity-75 mt-2">Based on {propertyIssues.length} issue{propertyIssues.length > 1 ? 's' : ''} selected</p>
                 </>
               ) : (
-                <p className="text-sm">Select issues to see your estimate</p>
+                <p className="text-sm py-2">Select issues above to see your estimate</p>
               )}
             </div>
 
             <button
               onClick={nextStep}
               disabled={propertyIssues.length === 0}
-              className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 text-white font-bold text-lg rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25"
+              className="w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-slate-300 disabled:to-slate-300 text-white font-bold text-lg rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 disabled:shadow-none"
             >
-               CONFIRM 0$ PAYOUT ELIGIBILITY <ArrowRight className="w-5 h-5" />
+              Continue <ArrowRight className="w-5 h-5" />
             </button>
             
             {/* Social proof */}
-            <div className="flex items-center justify-center gap-2 mt-3 text-xs text-slate-500">
-              <Users className="w-3.5 h-3.5" />
+            <div className="flex items-center justify-center gap-2 mt-4 text-xs text-slate-400">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
               <span>{recentClaim} — 2 min ago</span>
             </div>
           </motion.div>
@@ -425,46 +442,54 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.15 }}
           >
-            <button onClick={prevStep} className="flex items-center gap-1 text-slate-400 hover:text-slate-600 text-sm mb-4">
+            <button onClick={prevStep} className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 text-sm mb-5 transition-colors">
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
 
-            {/* Value reminder */}
-            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-4 text-center">
-              <p className="text-sm text-emerald-700">
-                Your potential benefit: <span className="font-bold text-emerald-800">${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}</span>
-              </p>
+            {/* Value reminder - compact */}
+            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl p-4 mb-5 text-center">
+              <p className="text-xs text-emerald-600 font-medium uppercase tracking-wider mb-1">Your Potential Benefit</p>
+              <p className="text-2xl font-black text-emerald-700">${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}</p>
             </div>
 
-            <h3 className="text-xl font-bold text-slate-900 mb-1">One last question</h3>
-            <p className="text-slate-500 text-sm mb-4">This program is for homeowners in {displayCity}</p>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">Do you own your home?</h3>
+            <p className="text-slate-500 text-sm mb-5">This program is exclusively for homeowners</p>
             
             <div className="space-y-3">
               <button
                 onClick={startAnalysis}
-                className="w-full p-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors text-left shadow-lg shadow-emerald-600/25"
+                className="w-full p-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl transition-all text-left shadow-lg shadow-emerald-600/25 group"
               >
-                <span className="font-bold text-lg">Yes, I own my home</span>
-                <span className="flex items-center gap-1 text-sm text-emerald-100 mt-1">
-                  <CheckCircle2 className="w-4 h-4" /> Get my free benefit estimate
-                </span>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-lg block">Yes, I own my home</span>
+                    <span className="text-sm text-emerald-100 mt-1 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4" /> Check my eligibility now
+                    </span>
+                  </div>
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                </div>
               </button>
               
-              <button disabled className="w-full p-4 bg-slate-100 text-slate-400 rounded-lg cursor-not-allowed text-left">
+              <button disabled className="w-full p-4 bg-slate-100 text-slate-400 rounded-xl cursor-not-allowed text-left">
                 <span className="font-medium">No, I'm renting</span>
                 <span className="block text-xs mt-0.5">Program is for homeowners only</span>
               </button>
             </div>
 
             {/* Trust signals */}
-            <div className="flex items-center justify-center gap-4 mt-5 pt-4 border-t border-slate-100">
+            <div className="flex items-center justify-center gap-5 mt-6 pt-5 border-t border-slate-100">
               <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                <Shield className="w-4 h-4 text-slate-400" />
-                <span>Licensed contractors</span>
+                <Shield className="w-4 h-4 text-emerald-500" />
+                <span>Licensed</span>
               </div>
               <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                <CheckCircle2 className="w-4 h-4 text-slate-400" />
-                <span>100% free</span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                <span>100% Free</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                <Clock className="w-4 h-4 text-emerald-500" />
+                <span>2 min</span>
               </div>
             </div>
           </motion.div>
