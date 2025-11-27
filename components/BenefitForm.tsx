@@ -495,20 +495,19 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
               ))}
             </div>
 
-            {/* Live Estimate Card */}
-            <div className={`rounded-2xl p-5 mb-5 text-center transition-all ${
+            {/* Live Estimate Card - Compact Premium */}
+            <div className={`rounded-xl px-4 py-3 mb-4 transition-all ${
               propertyIssues.length > 0 
-                ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-600/25' 
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md' 
                 : 'bg-slate-100 text-slate-500'
             }`}>
               {propertyIssues.length > 0 ? (
-                <>
-                  <p className="text-sm opacity-90 mb-1">Your estimated benefit</p>
-                  <p className="text-3xl sm:text-4xl font-black">${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}</p>
-                  <p className="text-xs opacity-75 mt-2">Based on {propertyIssues.length} issue{propertyIssues.length > 1 ? 's' : ''} selected</p>
-                </>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium opacity-90">Your Benefit:</span>
+                  <span className="text-xl sm:text-2xl font-black">${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}</span>
+                </div>
               ) : (
-                <p className="text-sm py-2">TAP ONE TO REVEAL PAYOUT</p>
+                <p className="text-sm text-center">TAP ONE TO REVEAL PAYOUT</p>
               )}
             </div>
 
