@@ -78,7 +78,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn("min-h-screen bg-background font-sans antialiased flex flex-col", inter.variable)}>
         <Header />
-        <div className="flex-1">
+        <div className="flex-1 pt-0">
           {children}
         </div>
         <Footer />
