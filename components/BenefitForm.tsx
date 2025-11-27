@@ -15,12 +15,12 @@ interface BenefitFormProps {
 }
 
 const calculateEstimateRange = (issues: string[]): { min: number; max: number } => {
-  const baseMin = 6500
-  const baseMax = 12000
-  const issueBonus = issues.length * 2000
+  const baseMin = 8700
+  const baseMax = 16500
+  const issueBonus = issues.length * 2500
   return { 
     min: baseMin + issueBonus, 
-    max: Math.min(baseMax + issueBonus, 18000) 
+    max: Math.min(baseMax + issueBonus, 23500) 
   }
 }
 
@@ -35,6 +35,8 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [isShaking, setIsShaking] = useState(false)
 
   const totalSteps = 2
   const nextStep = () => setStep(s => s + 1)
@@ -46,7 +48,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   useEffect(() => {
     // Fake recent claims for social proof
     const names = ['Michael R.', 'Sarah T.', 'James L.', 'Jennifer M.', 'Robert K.', 'Lisa H.']
-    const amounts = ['$8,400', '$12,200', '$9,800', '$14,500', '$11,300', '$7,900']
+    const amounts = ['$15,400', '$19,200', '$18,800', '$18,500', '$16,300', '$21,900']
     const idx = Math.floor(Math.random() * names.length)
     setRecentClaim(`${names[idx]} qualified for ${amounts[idx]}`)
   }, [])
@@ -63,6 +65,20 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
     setPropertyIssues(prev => 
       prev.includes(issue) ? prev.filter(i => i !== issue) : [...prev, issue]
     )
+    // Clear error kada user pasirenka
+    if (showError) setShowError(false)
+  }
+
+  const handleNextStep = () => {
+    if (propertyIssues.length === 0) {
+      // Shake + error
+      setIsShaking(true)
+      setShowError(true)
+      setTimeout(() => setIsShaking(false), 500)
+      return
+    }
+    setShowError(false)
+    nextStep()
   }
 
   const startAnalysis = () => setIsAnalyzing(true)
@@ -164,11 +180,11 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
         <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-8 h-8 text-emerald-600" />
         </div>
-        <h2 className="text-xl font-bold text-slate-900 mb-2">You're All Set</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-2">SUCCESS! Your Property is Pre-Qualified.</h2>
         <p className="text-slate-600 text-sm mb-4">
-          A contractor will call <span className="font-semibold">{formData.phone}</span> within 2 hours.
+          A Senior Claims Specialist is reviewing your file RIGHT NOW to confirm your potential payout.
         </p>
-        <p className="text-xs text-slate-400">Check your phone for a local number.</p>
+        <p className="text-xs text-slate-400">You will receive a call from in a few minutes.</p>
       </div>
     )
   }
@@ -179,6 +195,22 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   if (isEligible && step === 3) {
     return (
       <div className="w-full">
+        {/* Progress Bar - 85% Complete */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm font-bold text-slate-700">Pending Final Verification...</p>
+            <span className="text-xs font-semibold text-slate-500">85%</span>
+          </div>
+          <div className="relative h-3 bg-slate-200 rounded-full overflow-hidden">
+            <div className="absolute inset-0 flex">
+              {/* Completed 85% */}
+              <div className="w-[85%] bg-gradient-to-r from-emerald-500 to-teal-600" />
+              {/* Pulsing final 15% */}
+              <div className="w-[15%] bg-amber-400 animate-pulse" />
+            </div>
+          </div>
+        </div>
+
         {/* Success Badge */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-bold mb-4">
@@ -223,8 +255,9 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
           </div>
 
           <div>
+            <p className="text-xs text-slate-600 font-medium mb-2"></p>
             <Input 
-              placeholder="Phone Number" 
+              placeholder="Mobile Number (For Eligibility Report)" 
               type="tel"
               inputMode="tel"
               value={formData.phone}
@@ -269,7 +302,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
               }}
               className="sr-only"
             />
-            <span className="text-[11px] text-slate-500 leading-relaxed">
+            <span className="text-[9.5px] text-slate-400 leading-relaxed">
               I agree to receive calls/texts from Housing Benefit Check and 
               <a href="/partners" className="underline mx-0.5 hover:text-slate-700">partners</a> 
               at this number. Consent not required to purchase. 
@@ -293,7 +326,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                 Confirming...
               </span>
             ) : (
-              <>Get My Free Assessment <ArrowRight className="w-5 h-5" /></>
+              <>Unlock My Claim Estimate <ArrowRight className="w-5 h-5" /></>
             )}
           </button>
 
@@ -410,16 +443,23 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                   <p className="text-xs opacity-75 mt-2">Based on {propertyIssues.length} issue{propertyIssues.length > 1 ? 's' : ''} selected</p>
                 </>
               ) : (
-                <p className="text-sm py-2">Select issues above to see your estimate</p>
+                <p className="text-sm py-2">TAP ONE TO REVEAL PAYOUT</p>
               )}
             </div>
 
+            {showError && (
+              <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-center">
+                <p className="text-red-600 text-sm font-semibold">⚠️ Please select at least one issue above</p>
+              </div>
+            )}
+
             <button
-              onClick={nextStep}
-              disabled={propertyIssues.length === 0}
-              className="w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-slate-300 disabled:to-slate-300 text-white font-bold text-lg rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 disabled:shadow-none"
+              onClick={handleNextStep}
+              className={`w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-lg rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 ${
+                isShaking ? 'animate-shake' : ''
+              }`}
             >
-              Continue <ArrowRight className="w-5 h-5" />
+              CONFIRM $0 PAYOUT <ArrowRight className="w-5 h-5" />
             </button>
             
             {/* Social proof */}
@@ -464,7 +504,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                   <div>
                     <span className="font-bold text-lg block">Yes, I own my home</span>
                     <span className="text-sm text-emerald-100 mt-1 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4" /> Check my eligibility now
+                      <CheckCircle2 className="w-4 h-4" /> Proceed to Final Step
                     </span>
                   </div>
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />

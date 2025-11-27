@@ -170,7 +170,7 @@ export async function POST(request: NextRequest) {
     const leadData: Lead = {
       name: body.name,
       phone: body.phone,
-      email: body.email,
+      email: body.email || null,  // Email now optional
       zip_code: body.zipCode || null,
       city: body.city || request.headers.get('x-user-city') || null,
       state: body.state || request.headers.get('x-user-region') || null,

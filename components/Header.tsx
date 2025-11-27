@@ -15,7 +15,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+    <header className={`relative top-0 left-0 right-0 z-50 transition-all duration-200 ${
       scrolled 
         ? 'bg-white shadow-sm' 
         : 'bg-white'
@@ -42,12 +42,7 @@ export default function Header() {
           </a>
 
           {/* CTA Button - Clean */}
-          <Link 
-            href="/benefitform"
-            className="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
-          >
-            START NOW
-          </Link>
+
         </div>
 
       </div>

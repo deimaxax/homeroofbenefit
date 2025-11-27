@@ -19,7 +19,7 @@ export interface Lead {
   id?: string
   name: string
   phone: string
-  email: string
+  email?: string | null  // Now optional
   zip_code?: string | null
   city?: string | null
   state?: string | null

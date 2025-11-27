@@ -59,12 +59,12 @@ export default function ExitIntent({ maxBenefit = 18000 }: ExitIntentProps) {
       }
     }
 
-    // Shorter delay - 2.5 seconds
+    // Delay - 5 seconds
     const timeout = setTimeout(() => {
       document.addEventListener('mouseleave', handleMouseLeave)
       window.addEventListener('scroll', handleScroll, { passive: true })
       document.addEventListener('visibilitychange', handleVisibilityChange)
-    }, 2500)
+    }, 9000)
 
     return () => {
       clearTimeout(timeout)
