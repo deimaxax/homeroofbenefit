@@ -107,7 +107,7 @@
                     <p className="text-[10px] sm:text-xs text-emerald-300/70 uppercase tracking-wider mt-1">Your Cost</p>
                   </div>
                   <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 text-center hover:bg-white/10 transition-all hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5">
-                    <p className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">15min</p>
+                    <p className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">5 min</p>
                     <p className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider mt-1">Response</p>
                   </div>
                 </div>

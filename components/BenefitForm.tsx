@@ -14,14 +14,10 @@ interface BenefitFormProps {
   spotsLeft?: number
 }
 
-const calculateEstimateRange = (issues: string[]): { min: number; max: number } => {
-  const baseMin = 8700
-  const baseMax = 16500
-  const issueBonus = issues.length * 2500
-  return { 
-    min: baseMin + issueBonus, 
-    max: Math.min(baseMax + issueBonus, 23500) 
-  }
+const calculateEstimateRange = (_issues: string[]): { min: number; max: number } => {
+  // Fixed high-conversion range to avoid subconscious downsell.
+  // Always show $16,500 – $24,200 as requested.
+  return { min: 16500, max: 24200 }
 }
 
 export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }: BenefitFormProps) {
@@ -175,16 +171,33 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   // SUBMITTED
   // ═══════════════════════════════════════════════════════════════
   if (isSubmitted) {
+    const phoneDisplay = '(479) 844-1144'
+    const phoneTel = '+14798441144'
     return (
       <div className="text-center py-8">
         <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-8 h-8 text-emerald-600" />
         </div>
         <h2 className="text-xl font-bold text-slate-900 mb-2">SUCCESS! Your Property is Pre-Qualified.</h2>
-        <p className="text-slate-600 text-sm mb-4">
+        <p className="text-slate-600 text-sm mb-3">
           A Senior Claims Specialist is reviewing your file RIGHT NOW to confirm your potential payout.
         </p>
-        <p className="text-xs text-slate-400">You will receive a call from in a few minutes.</p>
+
+        <p className="text-sm text-slate-700 font-semibold mb-2">You will receive a call in exactly 3 MINUTES.</p>
+
+        <p className="text-sm text-slate-600 mb-4">Look out for an incoming call from: <span className="font-bold">{phoneDisplay}</span></p>
+
+        <div className="flex justify-center mb-2">
+          <a
+            href={`tel:${phoneTel}`}
+            className="inline-flex items-center justify-center bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl px-6 py-3 text-lg shadow-lg"
+            aria-label={`Call us now ${phoneDisplay}`}
+          >
+            SKIP THE LINE & CALL US NOW
+          </a>
+        </div>
+
+        <p className="text-xs text-slate-400">Please answer calls from this number — it's our Claims Team.</p>
       </div>
     )
   }
