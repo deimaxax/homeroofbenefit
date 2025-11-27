@@ -170,7 +170,9 @@ export async function POST(request: NextRequest) {
     const leadData: Lead = {
       name: body.name,
       phone: body.phone,
-      email: body.email || null,  // Email now optional
+      // Some deployments still have email marked NOT NULL in the DB.
+      // Coerce missing emails to empty string to avoid insert errors.
+      email: (body.email || '').toString(),
       zip_code: body.zipCode || null,
       city: body.city || request.headers.get('x-user-city') || null,
       state: body.state || request.headers.get('x-user-region') || null,
