@@ -423,7 +423,6 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
     <div 
       ref={formContainerRef} 
       className="w-full"
-      style={{ minHeight: containerHeight ? `${containerHeight}px` : 'auto' }}
     >
       {/* Premium Progress Indicator */}
       <div className="flex items-center justify-between mb-6">
