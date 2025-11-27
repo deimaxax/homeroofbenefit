@@ -36,6 +36,14 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
 
   // Ref for scroll control
   const formContainerRef = useRef<HTMLDivElement>(null)
+  const [containerHeight, setContainerHeight] = useState<number | null>(null)
+
+  // Capture initial height to prevent layout shifts
+  useEffect(() => {
+    if (formContainerRef.current && !containerHeight) {
+      setContainerHeight(formContainerRef.current.offsetHeight)
+    }
+  }, [])
 
   const totalSteps = 2
   const nextStep = () => setStep(s => s + 1)
@@ -168,6 +176,11 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
       }
       
       setIsSubmitted(true)
+      
+      // Scroll form into view smoothly
+      setTimeout(() => {
+        formContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 100)
     } catch (error) {
       console.error('Submission error:', error)
       
@@ -177,6 +190,11 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
       }
       
       setIsSubmitted(true)
+      
+      // Scroll form into view smoothly
+      setTimeout(() => {
+        formContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 100)
     } finally {
       setIsSubmitting(false)
     }
@@ -189,7 +207,11 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
     const phoneDisplay = '(479) 844-1144'
     const phoneTel = '+14798441144'
     return (
-      <div ref={formContainerRef} className="text-center py-8">
+      <div 
+        ref={formContainerRef} 
+        className="text-center py-8 flex flex-col justify-center"
+        style={{ minHeight: containerHeight ? `${containerHeight}px` : 'auto' }}
+      >
         <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-8 h-8 text-emerald-600" />
         </div>
@@ -222,7 +244,11 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   // ═══════════════════════════════════════════════════════════════
   if (isEligible && step === 3) {
     return (
-      <div ref={formContainerRef} className="w-full">
+      <div 
+        ref={formContainerRef} 
+        className="w-full"
+        style={{ minHeight: containerHeight ? `${containerHeight}px` : 'auto' }}
+      >
         {/* Progress Bar - 85% Complete */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
@@ -379,14 +405,26 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   // ANALYZING
   // ═══════════════════════════════════════════════════════════════
   if (isAnalyzing) {
-    return <AnalysisLoader onComplete={handleAnalysisComplete} city={displayCity} state={defaultState} />
+    return (
+      <div 
+        ref={formContainerRef}
+        className="w-full"
+        style={{ minHeight: containerHeight ? `${containerHeight}px` : 'auto' }}
+      >
+        <AnalysisLoader onComplete={handleAnalysisComplete} city={displayCity} state={defaultState} />
+      </div>
+    )
   }
 
   // ═══════════════════════════════════════════════════════════════
   // MAIN FORM STEPS
   // ═══════════════════════════════════════════════════════════════
   return (
-    <div ref={formContainerRef} className="w-full">
+    <div 
+      ref={formContainerRef} 
+      className="w-full"
+      style={{ minHeight: containerHeight ? `${containerHeight}px` : 'auto' }}
+    >
       {/* Premium Progress Indicator */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
