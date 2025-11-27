@@ -339,10 +339,10 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
           </div>
 
           {/* TCPA Consent - Cleaner */}
-          <label className={`flex items-start gap-3 p-4 rounded-xl cursor-pointer border-2 transition-all ${
+          <label className={`flex items-start gap-3 p-4 rounded-xl cursor-pointer border-2 transition-colors duration-100 ${
             consent ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200 hover:border-slate-300'
           }`}>
-            <div className={`w-5 h-5 mt-0.5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+            <div className={`w-5 h-5 mt-0.5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors duration-100 ${
               consent ? 'bg-emerald-600 border-emerald-600' : 'border-slate-300'
             }`}>
               {consent && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
@@ -369,7 +369,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-slate-400 disabled:to-slate-400 text-white font-bold text-lg rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30"
+            className="w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-slate-400 disabled:to-slate-400 text-white font-bold text-lg rounded-xl transition-colors duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2">
@@ -427,11 +427,11 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
       {/* Premium Progress Indicator */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-150 ${
             step >= 1 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
           }`}>1</div>
-          <div className={`w-12 h-1 rounded-full transition-all ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-200'}`} />
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+          <div className={`w-12 h-1 rounded-full transition-colors duration-150 ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-200'}`} />
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-150 ${
             step >= 2 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
           }`}>2</div>
         </div>
@@ -444,10 +444,10 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
         {step === 1 && (
           <motion.div 
             key="issues" 
-            initial={{ opacity: 0, x: 10 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.15 }}
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
           >
             <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">
               Does Insurance Owe You a New Roof?
@@ -463,7 +463,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
               ].map((item) => (
                 <label
                   key={item.id}
-                  className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                  className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-colors duration-100 ${
                     propertyIssues.includes(item.id)
                       ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500/20'
                       : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
@@ -482,7 +482,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
                   {'popular' in item && item.popular && !propertyIssues.includes(item.id) && (
                     <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-bold uppercase">Most Common</span>
                   )}
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors duration-100 ${
                     propertyIssues.includes(item.id)
                       ? 'bg-emerald-600 border-emerald-600'
                       : 'border-slate-300'
@@ -496,7 +496,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
             </div>
 
             {/* Live Estimate Card - Compact Premium */}
-            <div className={`rounded-xl px-4 py-3 mb-4 transition-all ${
+            <div className={`rounded-xl px-4 py-3 mb-4 transition-colors duration-150 ${
               propertyIssues.length > 0 
                 ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md' 
                 : 'bg-slate-100 text-slate-500'
@@ -519,7 +519,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
 
             <button
               onClick={handleNextStep}
-              className={`w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-lg rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 ${
+              className={`w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-lg rounded-xl transition-colors duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 ${
                 isShaking ? 'animate-shake' : ''
               }`}
             >
@@ -541,10 +541,10 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
         {step === 2 && (
           <motion.div 
             key="owner" 
-            initial={{ opacity: 0, x: 10 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.15 }}
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
           >
             <button onClick={prevStep} className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 text-sm mb-5 transition-colors">
               <ArrowLeft className="w-4 h-4" /> Back
@@ -562,7 +562,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
             <div className="space-y-3">
               <button
                 onClick={startAnalysis}
-                className="w-full p-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl transition-all text-left shadow-lg shadow-emerald-600/25 group"
+                className="w-full p-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl transition-colors duration-150 text-left shadow-lg shadow-emerald-600/25 group"
               >
                 <div className="flex items-center justify-between">
                   <div>
