@@ -76,7 +76,7 @@
                 {/* Main Headline - Dramatic */}
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.05] mb-6">
                   <span className="bg-gradient-to-r from-white via-white to-slate-300 bg-clip-text text-transparent">
-                    $0 Out-of-Pocket.
+                    UNCLAIMED ROOF ALLOWANCE?
                   </span>
                   <br />
                   <span className="bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-400 bg-clip-text text-transparent">

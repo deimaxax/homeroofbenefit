@@ -66,6 +66,7 @@ export default function TermsPage() {
               <li>We do not guarantee specific claim amounts or outcomes</li>
               <li>Final eligibility is determined by insurance companies and government agencies</li>
               <li>We are not responsible for the actions of third-party contractors or service providers</li>
+              <li>Per state law, homeowners are responsible for their deductible. We guarantee NO costs exceeding your deductible.</li>
             </ul>
           </section>
 

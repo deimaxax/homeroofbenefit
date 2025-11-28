@@ -198,11 +198,11 @@ export default function ExitIntent({ maxBenefit = 18000 }: ExitIntentProps) {
                     </p>
                     <h3 className="text-2xl md:text-3xl font-black mb-3">
                       You're About to Lose<br/>
-                      <span className="text-yellow-300">Up to $18,400</span>
+                      <span className="text-yellow-300">Up to $18,425.50</span>
                     </h3>
                     <div className="bg-black/30 backdrop-blur rounded-lg px-4 py-2 inline-block">
                       <p className="text-white font-bold text-sm">
-                        Your neighbor just claimed a FREE roof replacement.
+                        Your neighbor just claimed a roof replacement.
                       </p>
                     </div>
                   </div>
@@ -304,7 +304,7 @@ export default function ExitIntent({ maxBenefit = 18000 }: ExitIntentProps) {
                     onClick={() => setShow(false)}
                     className="w-full mt-3 text-xs text-gray-400 hover:text-gray-500 transition py-2"
                   >
-                    No thanks, I'd rather pay $15,000+ out of pocket
+                    No thanks, I'd rather pay $18,425.50+ out of pocket
                   </button>
                 </div>
               </>
