@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Input } from "@/components/ui/input"
 import { CheckCircle2, ArrowRight, ArrowLeft, Clock, Users, Shield } from 'lucide-react'
 import AnalysisLoader from './AnalysisLoader'
+import { trackEvent } from '@/lib/analytics'
 
 interface BenefitFormProps {
   defaultState?: string
@@ -46,7 +47,16 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   }, [])
 
   const totalSteps = 2
-  const nextStep = () => setStep(s => s + 1)
+  const nextStep = () => {
+    const newStep = step + 1
+    setStep(newStep)
+    trackEvent('form_step_completed', {
+      from_step: step,
+      to_step: newStep,
+      city: displayCity,
+      state: defaultState
+    })
+  }
   const prevStep = () => setStep(s => Math.max(1, s - 1))
 
   // LIVE COUNTER - Social proof
@@ -69,11 +79,21 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
   }, [defaultCity])
 
   const toggleIssue = (issue: string) => {
+    const isAdding = !propertyIssues.includes(issue)
     setPropertyIssues(prev => 
       prev.includes(issue) ? prev.filter(i => i !== issue) : [...prev, issue]
     )
     // Clear error kada user pasirenka
     if (showError) setShowError(false)
+    
+    // Track issue selection
+    if (isAdding) {
+      trackEvent('issue_selected', {
+        issue: issue,
+        total_issues: propertyIssues.length + 1,
+        city: displayCity
+      })
+    }
   }
 
   const handleNextStep = () => {
@@ -170,6 +190,14 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
         throw new Error(result.error || 'Failed to submit')
       }
       
+      // Track successful submission
+      trackEvent('lead_submitted_success', {
+        city: formData.zipCode,
+        issues_count: propertyIssues.length,
+        has_email: !!formData.name,
+        conversion_value: 100 // Assign lead value
+      })
+      
       // Blur active input to prevent mobile keyboard scroll
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur()
@@ -183,6 +211,13 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
       }, 100)
     } catch (error) {
       console.error('Submission error:', error)
+      
+      // Track submission error
+      trackEvent('lead_submission_error', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        city: formData.zipCode,
+        step: step
+      })
       
       // Blur active input to prevent mobile keyboard scroll
       if (document.activeElement instanceof HTMLElement) {

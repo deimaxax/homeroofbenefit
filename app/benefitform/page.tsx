@@ -4,6 +4,7 @@
   import BenefitForm from '@/components/BenefitForm'
   import ExitIntent from '@/components/ExitIntent'
   import MobileCTA from '@/components/MobileCTA'
+  import { Analytics } from "@vercel/analytics/next"
   import Link from 'next/link'
   import { Button } from '@/components/ui/button'
 
