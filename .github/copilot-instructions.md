@@ -1,8 +1,8 @@
-# Copilot Instructions for Housing Benefit Check
+# Copilot Instructions for Home Roof Program
 
 ## Project Overview
 
-**Housing Benefit Check** is a high-conversion roofing lead generation website built with **Next.js 14 (App Router)**, emphasizing IP-based personalization and multi-step form conversion patterns. It serves as a funneling tool to capture qualified leads for state-approved housing restoration benefits.
+**Home Roof Program** is a high-conversion roofing lead generation website built with **Next.js 14 (App Router)**, emphasizing IP-based personalization and multi-step form conversion patterns. It serves as a funneling tool to capture qualified leads for state-approved housing restoration benefits.
 
 ## Architecture & Core Concepts
 

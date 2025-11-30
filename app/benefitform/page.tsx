@@ -448,7 +448,7 @@
               <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
             </div>
             <p className="text-center text-xs text-slate-600 mt-6">
-              © {new Date().getFullYear()} Housing Benefit Check. All rights reserved.
+              © {new Date().getFullYear()} Home Roof Program. All rights reserved.
             </p>
           </div>
         </footer>

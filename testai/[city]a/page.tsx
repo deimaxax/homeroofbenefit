@@ -97,7 +97,7 @@ export default function CityPage({ params }: PageProps) {
                 <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner">
                   <span className="text-3xl font-black text-blue-900">HB</span>
                 </div>
-                <p className="text-xs font-medium text-gray-600">Housing Benefit Check</p>
+                <p className="text-xs font-medium text-gray-600">Home Roof Program</p>
               </div>
               <div className="text-center">
                 <div className="w-20 h-20 bg-green-700 rounded-full flex items-center justify-center mx-auto mb-2 text-white text-4xl font-bold">✓</div>
@@ -179,7 +179,7 @@ export default function CityPage({ params }: PageProps) {
             {/* Disclaimer */}
             <div className="mt-12 text-center">
               <p className="text-sm text-gray-500">
-                Housing Benefit Check is a private service. Not affiliated with any government agency.
+                Home Roof Program is a private service. Not affiliated with any government agency.
               </p>
             </div>
           </div>

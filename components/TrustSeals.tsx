@@ -67,7 +67,7 @@ export default function TrustSeals() {
 
         <div className="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 border-4 border-blue-200 rounded-3xl p-8 text-center">
           <p className="text-gray-700 font-semibold mb-2">
-            Housing Benefit Check is a private assessment service.
+            Home Roof Program is a private assessment service.
           </p>
           <p className="text-gray-600 text-sm">
             Not affiliated with any government agency. All information is secure and encrypted.

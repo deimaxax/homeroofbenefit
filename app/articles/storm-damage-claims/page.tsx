@@ -25,8 +25,8 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
     openGraph: {
       title: `Storm Damage Claims Guide 2025${titleSuffix}`,
       description: `Learn the step-by-step process to file and win storm damage claims for your property.${descSuffix}`,
-      url: `https://housingbenefitcheck.org/articles/storm-damage-claims`,
-      siteName: 'Housing Benefit Check',
+      url: `https://homeroofprogram.com/articles/storm-damage-claims`,
+      siteName: 'Home Roof Program',
       locale: 'en_US',
       type: 'article',
       images: [
@@ -49,7 +49,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
       images: ['/og-storm-claims.png']
     },
     alternates: {
-      canonical: `https://housingbenefitcheck.org/articles/storm-damage-claims`
+      canonical: `https://homeroofprogram.com/articles/storm-damage-claims`
     },
     robots: {
       index: true,
@@ -90,24 +90,24 @@ export default function StormDamageClaims({ searchParams }: { searchParams: { st
     "@type": "Article",
     "headline": `Storm Damage Claims Guide 2025${locationName ? ` - ${locationName}` : ''}`,
     "description": "Step-by-step guide to filing successful storm damage claims: documentation, timelines, adjuster meetings, common mistakes, and maximizing payouts.",
-    "image": "https://housingbenefitcheck.org/og-storm-claims.png",
+    "image": "https://homeroofprogram.com/og-storm-claims.png",
     "author": {
       "@type": "Organization",
-      "name": "Housing Benefit Check"
+      "name": "Home Roof Program"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Housing Benefit Check",
+      "name": "Home Roof Program",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://housingbenefitcheck.org/logo.png"
+        "url": "https://homeroofprogram.com/logo.png"
       }
     },
     "datePublished": "2025-11-20T00:00:00Z",
     "dateModified": "2025-11-26T00:00:00Z",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://housingbenefitcheck.org/articles/storm-damage-claims"
+      "@id": "https://homeroofprogram.com/articles/storm-damage-claims"
     }
   }
 

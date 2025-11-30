@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Our Partner Network | Housing Benefit Check',
+  title: 'Our Partner Network | Home Roof Program',
   description: 'Learn about our network of licensed, insured roofing contractors who may contact you.',
 }
 
@@ -21,7 +21,7 @@ export default function PartnersPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Who May Contact You</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              When you submit your information through Housing Benefit Check, you may be contacted by one or more 
+              When you submit your information through Home Roof Program, you may be contacted by one or more 
               licensed roofing contractors from our partner network. These contractors are:
             </p>
             <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-700">
@@ -107,7 +107,7 @@ export default function PartnersPage() {
             </p>
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
               <p className="text-slate-700 mb-2">
-                <strong>Email:</strong> support@housingbenefitcheck.org
+                <strong>Email:</strong> support@homeroofprogram.com
               </p>
               <p className="text-slate-700">
                 <strong>Subject line:</strong> "STOP - [Your Phone Number]"

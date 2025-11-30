@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Housing Benefit Check',
+  title: 'Contact Us | Home Roof Program',
   description: 'Get in touch with our team for questions about housing restoration benefits.',
 }
 
@@ -32,8 +32,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 mb-1">Email</h3>
-                  <a href="mailto:support@housingbenefitcheck.org" className="text-blue-600 hover:text-blue-700">
-                    support@housingbenefitcheck.org
+                  <a href="mailto:support@homeroofprogram.com" className="text-blue-600 hover:text-blue-700">
+                    support@homeroofprogram.com
                   </a>
                 </div>
               </div>

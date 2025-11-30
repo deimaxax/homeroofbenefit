@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'About Us | Housing Benefit Check',
-  description: 'Learn about Housing Benefit Check and our mission to help homeowners access restoration benefits.',
+  title: 'About Us | Home Roof Program',
+  description: 'Learn about Home Roof Program and our mission to help homeowners access restoration benefits.',
 }
 
 export default function AboutPage() {
@@ -17,7 +17,7 @@ export default function AboutPage() {
             ← Back to Home
           </Link>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">About Housing Benefit Check</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">About Home Roof Program</h1>
           <p className="text-xl md:text-2xl text-blue-100 leading-relaxed">
             Helping homeowners discover and claim their eligible restoration benefits since 2020.
           </p>
@@ -29,7 +29,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-slate-900 mb-6">Our Mission</h2>
           <p className="text-xl text-slate-700 leading-relaxed mb-6">
-            At Housing Benefit Check, we believe every homeowner deserves access to the restoration benefits they've earned. Our mission is to simplify the complex process of identifying, applying for, and securing housing restoration benefits.
+            At Home Roof Program, we believe every homeowner deserves access to the restoration benefits they've earned. Our mission is to simplify the complex process of identifying, applying for, and securing housing restoration benefits.
           </p>
           <p className="text-xl text-slate-700 leading-relaxed">
             We've helped over 50,000 homeowners across 9 states recover more than $2.4 billion in benefits, making us one of the most trusted names in housing restoration assistance.
@@ -43,7 +43,7 @@ export default function AboutPage() {
           <h2 className="text-4xl font-bold text-slate-900 mb-6">Our Story</h2>
           <div className="space-y-6 text-lg text-slate-700 leading-relaxed">
             <p>
-              Housing Benefit Check was founded in 2020 by a team of insurance professionals, contractors, and technology experts who saw a critical gap in the market. Too many homeowners were unaware of the benefits available to them, or found the claims process too complex to navigate alone.
+              Home Roof Program was founded in 2020 by a team of insurance professionals, contractors, and technology experts who saw a critical gap in the market. Too many homeowners were unaware of the benefits available to them, or found the claims process too complex to navigate alone.
             </p>
             <p>
               We started with a simple idea: create a free, easy-to-use platform that helps homeowners understand their eligibility and connects them with qualified professionals who can help them through the claims process.

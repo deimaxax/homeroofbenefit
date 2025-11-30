@@ -109,8 +109,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${countyData.county} County, ${stateName} Housing Benefits 2025`,
       description: `Free roof inspections for ${countyData.county} County homeowners. ${cityCount} cities covered including ${topCities}.`,
-      url: `https://housingbenefitcheck.org/state/${params.state}/${params.city}/county`,
-      siteName: 'Housing Benefit Check',
+      url: `https://homeroofprogram.com/state/${params.state}/${params.city}/county`,
+      siteName: 'Home Roof Program',
       locale: 'en_US',
       type: 'website',
       images: [
@@ -129,7 +129,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [`/og-${countyData.county.toLowerCase().replace(/\s+/g, '-')}-county.png`]
     },
     alternates: {
-      canonical: `https://housingbenefitcheck.org/state/${params.state}/${params.city}/county`
+      canonical: `https://homeroofprogram.com/state/${params.state}/${params.city}/county`
     },
     robots: {
       index: true,
@@ -386,7 +386,7 @@ export async function generateStaticParams() {
         {/* Disclaimer */}
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500">
-            Housing Benefit Check is a private service. Not affiliated with any government agency.
+            Home Roof Program is a private service. Not affiliated with any government agency.
           </p>
         </div>
       </div>

@@ -9,16 +9,16 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://housingbenefitcheck.org'),
+  metadataBase: new URL('https://homeroofprogram.com'),
   title: {
-    default: 'Housing Benefit Check | Check Your Eligibility for 2025 Restoration Benefits',
-    template: '%s | Housing Benefit Check'
+    default: 'Home Roof Program | Check Your Eligibility for 2025 Restoration Benefits',
+    template: '%s | Home Roof Program'
   },
   description: 'Discover if you qualify for state-approved housing restoration benefits. Free eligibility check for homeowners in TX, CO, OK, KS, NE, MO, FL, MN, and IL. Over $2.4B in benefits claimed.',
   keywords: ['housing benefits', 'restoration benefits', 'storm damage', 'roof repair', 'hail damage', 'insurance claims', 'home restoration', 'property damage'],
-  authors: [{ name: 'Housing Benefit Check' }],
-  creator: 'Housing Benefit Check',
-  publisher: 'Housing Benefit Check',
+  authors: [{ name: 'Home Roof Program' }],
+  creator: 'Home Roof Program',
+  publisher: 'Home Roof Program',
   formatDetection: {
     email: false,
     address: false,
@@ -27,22 +27,22 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://housingbenefitcheck.org',
-    siteName: 'Housing Benefit Check',
-    title: 'Housing Benefit Check | Check Your Eligibility for 2025 Restoration Benefits',
+    url: 'https://homeroofprogram.com',
+    siteName: 'Home Roof Program',
+    title: 'Home Roof Program | Check Your Eligibility for 2025 Restoration Benefits',
     description: 'Discover if you qualify for state-approved housing restoration benefits. Free eligibility check for homeowners.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Housing Benefit Check',
+        alt: 'Home Roof Program',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Housing Benefit Check | Check Your Eligibility',
+    title: 'Home Roof Program | Check Your Eligibility',
     description: 'Discover if you qualify for state-approved housing restoration benefits.',
     images: ['/og-image.jpg'],
   },

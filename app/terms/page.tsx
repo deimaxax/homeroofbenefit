@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Housing Benefit Check',
-  description: 'Terms and conditions for using Housing Benefit Check services.',
+  title: 'Terms of Service | Home Roof Program',
+  description: 'Terms and conditions for using Home Roof Program services.',
 }
 
 export default function TermsPage() {
@@ -21,14 +21,14 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Agreement to Terms</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              By accessing or using Housing Benefit Check ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of the terms, you may not access the Service.
+              By accessing or using Home Roof Program ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of the terms, you may not access the Service.
             </p>
           </section>
 
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Description of Service</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              Housing Benefit Check provides:
+              Home Roof Program provides:
             </p>
             <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-700">
               <li>Eligibility checking for housing restoration benefits</li>
@@ -88,7 +88,7 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Intellectual Property</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              The Service and its original content, features, and functionality are owned by Housing Benefit Check and are protected by international copyright, trademark, and other intellectual property laws.
+              The Service and its original content, features, and functionality are owned by Home Roof Program and are protected by international copyright, trademark, and other intellectual property laws.
             </p>
             <p className="text-slate-700 leading-relaxed">
               You may not copy, modify, distribute, sell, or lease any part of our Service without our express written permission.
@@ -111,7 +111,7 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Limitation of Liability</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              TO THE MAXIMUM EXTENT PERMITTED BY LAW, HOUSING BENEFIT CHECK SHALL NOT BE LIABLE FOR:
+              TO THE MAXIMUM EXTENT PERMITTED BY LAW, HOME ROOF PROGRAM SHALL NOT BE LIABLE FOR:
             </p>
             <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-700">
               <li>Any indirect, incidental, special, or consequential damages</li>
@@ -125,7 +125,7 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Indemnification</h2>
             <p className="text-slate-700 leading-relaxed">
-              You agree to indemnify and hold harmless Housing Benefit Check from any claims, damages, losses, liabilities, and expenses arising from your use of the Service or violation of these Terms.
+              You agree to indemnify and hold harmless Home Roof Program from any claims, damages, losses, liabilities, and expenses arising from your use of the Service or violation of these Terms.
             </p>
           </section>
 
@@ -156,7 +156,7 @@ export default function TermsPage() {
               If you have questions about these Terms, please contact us:
             </p>
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-              <p className="text-slate-700 mb-2"><strong>Email:</strong> support@housingbenefitcheck.org</p>
+              <p className="text-slate-700 mb-2"><strong>Email:</strong> support@homeroofprogram.com</p>
               <p className="text-slate-700 text-sm text-slate-500 mt-2">
                 Response time: 1-2 business days
               </p>

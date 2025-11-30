@@ -33,8 +33,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${stateName} Homeowner Benefits - Free Roof Inspection 2025`,
       description: `${stateName} homeowners: Check eligibility for storm damage recovery and roof restoration programs. ${stateData.stats.homeowners} served statewide.`,
-      url: `https://housingbenefitcheck.org/state/${params.state}`,
-      siteName: 'Housing Benefit Check',
+      url: `https://homeroofprogram.com/state/${params.state}`,
+      siteName: 'Home Roof Program',
       locale: 'en_US',
       type: 'website',
       images: [
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [`/og-${params.state}.png`]
     },
     alternates: {
-      canonical: `https://housingbenefitcheck.org/state/${params.state}`
+      canonical: `https://homeroofprogram.com/state/${params.state}`
     },
     robots: {
       index: true,

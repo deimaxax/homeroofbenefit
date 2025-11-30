@@ -25,8 +25,8 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
     openGraph: {
       title: `Free Roof Inspection Guide 2025${titleSuffix}`,
       description: `Professional roof inspection at no cost. Learn qualification requirements, inspection process, and what to expect.${descSuffix}`,
-      url: `https://housingbenefitcheck.org/articles/free-roof-inspection-guide`,
-      siteName: 'Housing Benefit Check',
+      url: `https://homeroofprogram.com/articles/free-roof-inspection-guide`,
+      siteName: 'Home Roof Program',
       locale: 'en_US',
       type: 'article',
       images: [
@@ -49,7 +49,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
       images: ['/og-free-inspection.png']
     },
     alternates: {
-      canonical: `https://housingbenefitcheck.org/articles/free-roof-inspection-guide`
+      canonical: `https://homeroofprogram.com/articles/free-roof-inspection-guide`
     },
     robots: {
       index: true,
@@ -91,24 +91,24 @@ export default function FreeRoofInspectionGuide({ searchParams }: { searchParams
     "@type": "Article",
     "headline": `Free Roof Inspection Guide 2025${locationName ? ` - ${locationName}` : ''}`,
     "description": "Get a professional roof inspection at no cost. Complete guide: what inspectors check, how to qualify, red flags to avoid, and what it reveals about storm damage.",
-    "image": "https://housingbenefitcheck.org/og-free-inspection.png",
+    "image": "https://homeroofprogram.com/og-free-inspection.png",
     "author": {
       "@type": "Organization",
-      "name": "Housing Benefit Check"
+      "name": "Home Roof Program"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Housing Benefit Check",
+      "name": "Home Roof Program",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://housingbenefitcheck.org/logo.png"
+        "url": "https://homeroofprogram.com/logo.png"
       }
     },
     "datePublished": "2025-11-26T00:00:00Z",
     "dateModified": "2025-11-26T00:00:00Z",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://housingbenefitcheck.org/articles/free-roof-inspection-guide"
+      "@id": "https://homeroofprogram.com/articles/free-roof-inspection-guide"
     }
   }
 

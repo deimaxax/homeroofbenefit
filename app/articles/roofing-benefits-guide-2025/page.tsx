@@ -25,8 +25,8 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
     openGraph: {
       title: `Roofing Benefits Guide 2025${titleSuffix}`,
       description: `Maximize your roofing restoration benefits. Complete eligibility guide and claim navigation.${descSuffix}`,
-      url: `https://housingbenefitcheck.org/articles/roofing-benefits-guide-2025`,
-      siteName: 'Housing Benefit Check',
+      url: `https://homeroofprogram.com/articles/roofing-benefits-guide-2025`,
+      siteName: 'Home Roof Program',
       locale: 'en_US',
       type: 'article',
       images: [
@@ -49,7 +49,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
       images: ['/og-benefits-guide.png']
     },
     alternates: {
-      canonical: `https://housingbenefitcheck.org/articles/roofing-benefits-guide-2025`
+      canonical: `https://homeroofprogram.com/articles/roofing-benefits-guide-2025`
     },
     robots: {
       index: true,
@@ -91,24 +91,24 @@ export default function RoofingBenefitsGuide({ searchParams }: { searchParams: {
     "@type": "Article",
     "headline": `Roofing Benefits Guide 2025${locationName ? ` - ${locationName}` : ''}`,
     "description": "Complete guide to roofing restoration benefits: eligibility requirements, application process, benefit maximization, state programs, and claim navigation.",
-    "image": "https://housingbenefitcheck.org/og-benefits-guide.png",
+    "image": "https://homeroofprogram.com/og-benefits-guide.png",
     "author": {
       "@type": "Organization",
-      "name": "Housing Benefit Check"
+      "name": "Home Roof Program"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Housing Benefit Check",
+      "name": "Home Roof Program",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://housingbenefitcheck.org/logo.png"
+        "url": "https://homeroofprogram.com/logo.png"
       }
     },
     "datePublished": "2025-11-24T00:00:00Z",
     "dateModified": "2025-11-26T00:00:00Z",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://housingbenefitcheck.org/articles/roofing-benefits-guide-2025"
+      "@id": "https://homeroofprogram.com/articles/roofing-benefits-guide-2025"
     }
   }
 

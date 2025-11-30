@@ -10,8 +10,8 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: 'Roofing Resources & Expert Guides 2025',
       description: 'Free roof inspection guides, hail damage claims help, storm recovery tips, and housing benefit resources for homeowners.',
-      url: 'https://housingbenefitcheck.org/articles',
-      siteName: 'Housing Benefit Check',
+      url: 'https://homeroofprogram.com/articles',
+      siteName: 'Home Roof Program',
       locale: 'en_US',
       type: 'website',
       images: [
@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: ['/og-articles.png']
     },
     alternates: {
-      canonical: 'https://housingbenefitcheck.org/articles'
+      canonical: 'https://homeroofprogram.com/articles'
     },
     robots: {
       index: true,

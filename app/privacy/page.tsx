@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Housing Benefit Check',
+  title: 'Privacy Policy | Home Roof Program',
   description: 'Our privacy policy explains how we collect, use, and protect your personal information.',
 }
 
@@ -21,7 +21,7 @@ export default function PrivacyPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Introduction</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              Housing Benefit Check ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
+              Home Roof Program ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
             </p>
             <p className="text-slate-700 leading-relaxed">
               Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.
@@ -157,7 +157,7 @@ export default function PrivacyPage() {
               If you have questions about this Privacy Policy, please contact us:
             </p>
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-              <p className="text-slate-700 mb-2"><strong>Email:</strong> support@housingbenefitcheck.org</p>
+              <p className="text-slate-700 mb-2"><strong>Email:</strong> support@homeroofprogram.com</p>
               <p className="text-slate-700 text-sm text-slate-500 mt-2">
                 Response time: 1-2 business days
               </p>

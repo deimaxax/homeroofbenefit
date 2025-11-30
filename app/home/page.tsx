@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button'
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Housing Benefit Check",
-  "url": "https://housingbenefitcheck.org",
-  "logo": "https://housingbenefitcheck.org/logo.png",
+  "name": "Home Roof Program",
+  "url": "https://homeroofprogram.com",
+  "logo": "https://homeroofprogram.com/logo.png",
   "description": "Helping homeowners discover and claim their eligible restoration benefits",
   "address": {
     "@type": "PostalAddress",
@@ -20,12 +20,12 @@ const structuredData = {
     "@type": "ContactPoint",
     "telephone": "+1-800-BENEFITS",
     "contactType": "customer service",
-    "email": "support@housingbenefitcheck.org",
+    "email": "support@homeroofprogram.com",
     "availableLanguage": ["English"]
   },
   "sameAs": [
-    "https://facebook.com/housingbenefitcheck",
-    "https://twitter.com/housingbenefits"
+    "https://facebook.com/homeroofprogram",
+    "https://twitter.com/homeroofprogram"
   ],
   "areaServed": [
     "Texas", "Colorado", "Oklahoma", "Kansas", "Nebraska", 
@@ -95,7 +95,7 @@ export default function HomePage() {
         <section className="py-20 px-4 bg-white border-y-2 border-gray-200">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-black text-center text-gray-900 mb-4">
-              Why Choose Housing Benefit Check?
+              Why Choose Home Roof Program?
             </h2>
             <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto">
               We make it simple and secure to discover your eligibility for government-approved restoration programs.
@@ -220,7 +220,7 @@ export default function HomePage() {
                 <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
                   <span className="text-4xl font-black text-blue-900">HB</span>
                 </div>
-                <p className="text-sm font-bold text-gray-700">Housing Benefit Check</p>
+                <p className="text-sm font-bold text-gray-700">Home Roof Program</p>
               </div>
               <div className="text-center">
                 <div className="w-24 h-24 bg-green-700 rounded-full flex items-center justify-center mx-auto mb-3 text-white text-5xl font-bold shadow-lg">✓</div>
@@ -270,7 +270,7 @@ export default function HomePage() {
         <section className="py-8 px-4 bg-gray-100 border-t border-gray-300">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-sm text-gray-600">
-              Housing Benefit Check is a private service that helps homeowners identify potential eligibility for restoration programs. 
+              Home Roof Program is a private service that helps homeowners identify potential eligibility for restoration programs. 
               We are not affiliated with any government agency. All benefits are subject to program terms and conditions.
             </p>
           </div>

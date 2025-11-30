@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════
--- LEADS TABLE - Housing Benefit Check
+-- LEADS TABLE - Home Roof Program
 -- Run this in your Supabase SQL Editor
 -- ═══════════════════════════════════════════════════════════════
 

@@ -392,7 +392,7 @@ export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }
               className="sr-only"
             />
             <span className="text-[9.5px] text-slate-400 leading-relaxed">
-              I agree to receive calls/texts from Housing Benefit Check and 
+              I agree to receive calls/texts from Home Roof Program and 
               <a href="/partners" className="underline mx-0.5 hover:text-slate-700">partners</a> 
               at this number. Consent not required to purchase. 
               <a href="/privacy" className="underline mx-0.5 hover:text-slate-700">Privacy</a> • 

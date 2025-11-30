@@ -25,8 +25,8 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
     openGraph: {
       title: `Home Restoration Tips 2025${titleSuffix}`,
       description: `Expert advice on restoring your home after storm damage and maximizing your benefits.${descSuffix}`,
-      url: `https://housingbenefitcheck.org/articles/home-restoration-tips`,
-      siteName: 'Housing Benefit Check',
+      url: `https://homeroofprogram.com/articles/home-restoration-tips`,
+      siteName: 'Home Roof Program',
       locale: 'en_US',
       type: 'article',
       images: [
@@ -49,7 +49,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
       images: ['/og-restoration-tips.png']
     },
     alternates: {
-      canonical: `https://housingbenefitcheck.org/articles/home-restoration-tips`
+      canonical: `https://homeroofprogram.com/articles/home-restoration-tips`
     },
     robots: {
       index: true,
@@ -90,24 +90,24 @@ export default function HomeRestorationTips({ searchParams }: { searchParams: { 
     "@type": "Article",
     "headline": `Home Restoration Tips 2025${locationName ? ` - ${locationName}` : ''}`,
     "description": "Expert home restoration tips after storm damage: contractor selection, material choices, timeline management, benefit maximization, and quality control.",
-    "image": "https://housingbenefitcheck.org/og-restoration-tips.png",
+    "image": "https://homeroofprogram.com/og-restoration-tips.png",
     "author": {
       "@type": "Organization",
-      "name": "Housing Benefit Check"
+      "name": "Home Roof Program"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Housing Benefit Check",
+      "name": "Home Roof Program",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://housingbenefitcheck.org/logo.png"
+        "url": "https://homeroofprogram.com/logo.png"
       }
     },
     "datePublished": "2025-11-15T00:00:00Z",
     "dateModified": "2025-11-26T00:00:00Z",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://housingbenefitcheck.org/articles/home-restoration-tips"
+      "@id": "https://homeroofprogram.com/articles/home-restoration-tips"
     }
   }
 

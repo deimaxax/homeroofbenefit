@@ -7,7 +7,7 @@ import { MetadataRoute } from 'next'
 // This file only needs core pages for manual sitemap.xml
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://housingbenefitcheck.org'
+  const baseUrl = 'https://homeroofprogram.com'
   
   // Static pages
   const staticPages = [

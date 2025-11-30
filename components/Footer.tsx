@@ -29,7 +29,7 @@ export default function Footer() {
               <div className="w-12 h-12 bg-blue-700 rounded-full flex items-center justify-center text-white font-black text-xl shadow-lg">
                 HB
               </div>
-              <h3 className="text-white text-xl font-black">Housing Benefit Check</h3>
+              <h3 className="text-white text-xl font-black">Home Roof Program</h3>
             </div>
             <p className="text-gray-400 mb-6 leading-relaxed text-sm">
               We connect homeowners with licensed roofing contractors for free inspections and insurance claim assistance.
@@ -122,7 +122,7 @@ export default function Footer() {
         <div className="bg-amber-900/30 rounded-xl p-6 mt-12 border-2 border-amber-700/50">
           <p className="text-gray-300 text-sm leading-relaxed text-center">
             <span className="font-bold text-amber-400 text-base block mb-2"> DISCLAIMER</span>
-            Housing Benefit Check is a <strong>private marketing service</strong> that connects homeowners with licensed roofing contractors. 
+            Home Roof Program is a <strong>private marketing service</strong> that connects homeowners with licensed roofing contractors. 
             <span className="block mt-2 text-amber-200 font-medium">
               We are NOT affiliated with, endorsed by, or connected to any federal, state, or local government agency or program.
             </span>
@@ -136,7 +136,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm font-medium">
-            © 2025 Housing Benefit Check. All rights reserved.
+            © 2025 Home Roof Program. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
             <a href="/sitemap.xml" className="text-gray-500 hover:text-gray-300 transition-colors font-medium">Sitemap</a>

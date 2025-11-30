@@ -7,15 +7,15 @@
 1. Eik į: https://clarity.microsoft.com/
 2. Sign in (Google/Microsoft)
 3. Click "Add new project"
-4. Name: "Housing Benefit Check"
-5. Website: "housingbenefitcheck.org"
+4. Name: "Home Roof Program"
+5. Website: "homeroofprogram.com"
 6. COPY Project ID (pvz., "abc123def")
 ```
 
 ### 2. **Google Analytics 4 Setup** (3 min)
 ```bash
 1. Eik į: https://analytics.google.com/
-2. Create Account → "Housing Benefit Check"
+2. Create Account → "Home Roof Program"
 3. Create Property → "Main Site"
 4. COPY Measurement ID (pvz., "G-XXXXXXXXXX")
 ```

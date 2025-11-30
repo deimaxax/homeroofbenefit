@@ -25,8 +25,8 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
     openGraph: {
       title: `Hail Damage Roof Replacement Guide 2025${titleSuffix}`,
       description: `Learn to identify hail damage, file successful insurance claims, and get full roof replacement covered.${descSuffix}`,
-      url: `https://housingbenefitcheck.org/articles/hail-damage-roof-replacement`,
-      siteName: 'Housing Benefit Check',
+      url: `https://homeroofprogram.com/articles/hail-damage-roof-replacement`,
+      siteName: 'Home Roof Program',
       locale: 'en_US',
       type: 'article',
       images: [
@@ -49,7 +49,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { state
       images: ['/og-hail-damage.png']
     },
     alternates: {
-      canonical: `https://housingbenefitcheck.org/articles/hail-damage-roof-replacement`
+      canonical: `https://homeroofprogram.com/articles/hail-damage-roof-replacement`
     },
     robots: {
       index: true,
@@ -91,24 +91,24 @@ export default function HailDamageRoofReplacement({ searchParams }: { searchPara
     "@type": "Article",
     "headline": `Hail Damage Roof Replacement Guide 2025${locationName ? ` - ${locationName}` : ''}`,
     "description": "Complete guide to hail damage roof replacement: identify damage, file insurance claims, cost breakdowns, contractor selection, and claim timeline.",
-    "image": "https://housingbenefitcheck.org/og-hail-damage.png",
+    "image": "https://homeroofprogram.com/og-hail-damage.png",
     "author": {
       "@type": "Organization",
-      "name": "Housing Benefit Check"
+      "name": "Home Roof Program"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Housing Benefit Check",
+      "name": "Home Roof Program",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://housingbenefitcheck.org/logo.png"
+        "url": "https://homeroofprogram.com/logo.png"
       }
     },
     "datePublished": "2025-11-26T00:00:00Z",
     "dateModified": "2025-11-26T00:00:00Z",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://housingbenefitcheck.org/articles/hail-damage-roof-replacement"
+      "@id": "https://homeroofprogram.com/articles/hail-damage-roof-replacement"
     }
   }
 

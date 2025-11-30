@@ -265,7 +265,7 @@ export default function ExitIntent({ maxBenefit = 18000 }: ExitIntentProps) {
                         className="mt-0.5 w-4 h-4 rounded border-gray-300 text-blue-600"
                       />
                       <span className="text-[10px] text-gray-500 leading-relaxed">
-                        I agree to receive calls/texts from Housing Benefit Check and partner contractors via automated technology. 
+                        I agree to receive calls/texts from Home Roof Program and partner contractors via automated technology. 
                         Consent not required for services. 
                         <a href="/privacy" target="_blank" className="underline text-blue-600 ml-0.5">Privacy</a> · 
                         <a href="/terms" target="_blank" className="underline text-blue-600 ml-0.5">Terms</a>
