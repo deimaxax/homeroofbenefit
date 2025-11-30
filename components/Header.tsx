@@ -41,15 +41,15 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
           <div className="relative">
             <div className="w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-600/25 group-hover:shadow-xl group-hover:shadow-emerald-600/35 transition-all duration-300 group-hover:scale-105">
-              <span className="text-white font-black text-base sm:text-lg tracking-tight">HBC</span>
+              <span className="text-white font-black text-base sm:text-lg tracking-tight">HRP</span>
             </div>
             <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full border-2 border-white flex items-center justify-center">
               <span className="text-[7px] font-black text-white">✓</span>
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="font-black text-slate-900 text-sm sm:text-base tracking-tight leading-tight">Housing</span>
-            <span className="text-[9px] sm:text-[10px] text-emerald-600 font-bold uppercase tracking-wider leading-tight">Benefit Check</span>
+            <span className="font-black text-slate-900 text-sm sm:text-base tracking-tight leading-tight">Home</span>
+            <span className="text-[9px] sm:text-[10px] text-emerald-600 font-bold uppercase tracking-wider leading-tight">Roof Program</span>
           </div>
         </Link>
 
