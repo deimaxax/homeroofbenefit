@@ -57,7 +57,7 @@ export default function Header() {
                 
                 {/* MOBILE OPTIMIZATION: Shorten text on small screens */}
                 <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
-                    <span className="sm:hidden">Status: Open</span>
+                    <span className="sm:hidden">Submission: Open</span>
                     <span className="hidden sm:inline">Submission Window: Open</span>
                 </span>
              </div>
