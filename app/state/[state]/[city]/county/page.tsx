@@ -145,52 +145,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-// Generate static params for all county pages
+// Generate static params for TOP county pages only (reduces build log size)
+// Other counties generated on-demand via ISR
 export async function generateStaticParams() {
-  try {
-    const filePath = path.join(process.cwd(), 'data', 'dynamic_cities.json')
-    const fileContents = fs.readFileSync(filePath, 'utf8')
-    const lines = fileContents.trim().split('\n')
-    const allCities = lines.map(line => JSON.parse(line))
-
-    const stateMap: Record<string, string> = {
-      'Texas': 'texas',
-      'Colorado': 'colorado',
-      'Oklahoma': 'oklahoma',
-      'Kansas': 'kansas',
-      'Nebraska': 'nebraska',
-      'Missouri': 'missouri',
-      'Florida': 'florida',
-      'Minnesota': 'minnesota',
-      'Illinois': 'illinois',
-    }
-
-    const params: Array<{ state: string; city: string }> = []
+  // Pre-generate only major county pages at build time
+  // Counties with highest traffic/population
+  const topCounties = [
+    // Texas counties
+    { state: 'texas', city: 'houston' }, // Harris County
+    { state: 'texas', city: 'dallas' }, // Dallas County
+    { state: 'texas', city: 'austin' }, // Travis County
+    { state: 'texas', city: 'san-antonio' }, // Bexar County
+    { state: 'texas', city: 'fort-worth' }, // Tarrant County
     
-    // Only include cities that have county information
-    allCities.forEach((item: any) => {
-      const stateSlug = stateMap[item.state]
-      if (stateSlug && item.city && item.county) {
-        const citySlug = item.city.toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^a-z0-9-]/g, '')
-        
-        // Avoid duplicates
-        if (!params.some(p => p.state === stateSlug && p.city === citySlug)) {
-          params.push({
-            state: stateSlug,
-            city: citySlug
-          })
-        }
-      }
-    })
+    // Colorado counties
+    { state: 'colorado', city: 'denver' }, // Denver County
+    { state: 'colorado', city: 'aurora' }, // Arapahoe County
+    { state: 'colorado', city: 'colorado-springs' }, // El Paso County
+    
+    // Florida counties
+    { state: 'florida', city: 'miami' }, // Miami-Dade County
+    { state: 'florida', city: 'tampa' }, // Hillsborough County
+    { state: 'florida', city: 'jacksonville' }, // Duval County
+    { state: 'florida', city: 'orlando' }, // Orange County
+  ]
 
-    return params
-  } catch (error) {
-    console.error('Error generating county static params:', error)
-    return []
-  }
-}export default function CountyPage({ params }: Props) {
+  return topCounties
+}
+
+// Enable ISR for dynamic county pages
+export const dynamicParams = true
+export const revalidate = 86400
+
+export default function CountyPage({ params }: Props) {
   const stateName = getStateData(params.state)
   const countyData = getCountyData(params.city, stateName || '')
   

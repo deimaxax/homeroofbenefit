@@ -1,0 +1,28 @@
+# Vercel ignore - exclude from deployment to reduce build size
+
+# Old data files
+data/dynamic_cities_old.json
+
+# Test directories
+testai/
+
+# Documentation
+*.md
+!README.md
+
+# Git files
+.git/
+.github/
+
+# Local env files
+.env*.local
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

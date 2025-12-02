@@ -367,7 +367,7 @@ export default function StatePage({ params }: Props) {
         </div>
       </section>
 
-      {/* Articles Section - SEO Content */}
+      {/* Articles Section - Links to REAL articles with state param */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 text-center">
@@ -432,7 +432,7 @@ export default function StatePage({ params }: Props) {
                   return (
                     <Link 
                       key={index}
-                      href={`/state/${params.state}/${citySlug}/county`}
+                      href={`/state/${params.state}/${citySlug}`}
                       className="group"
                     >
                       <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 cursor-pointer">
@@ -495,7 +495,7 @@ export default function StatePage({ params }: Props) {
                         return (
                           <Link 
                             key={index + 100}
-                            href={`/state/${params.state}/${citySlug}/county`}
+                            href={`/state/${params.state}/${citySlug}`}
                             className="group"
                           >
                             <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 cursor-pointer">

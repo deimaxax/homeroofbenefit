@@ -60,55 +60,137 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-// Generate ALL city pages at build time for SEO/Google crawling
-// Logging is suppressed in next.config.mjs to stay under 4MB Vercel log limit
+// Generate only TOP cities at build time (reduces build log from 15k+ to ~200 cities)
+// Other cities are generated on-demand via ISR when first visited
+// This keeps build logs under 4MB Vercel limit while maintaining SEO
 export async function generateStaticParams() {
-  const fs = await import('fs')
-  const path = await import('path')
-  
-  try {
-    const filePath = path.join(process.cwd(), 'data', 'dynamic_cities.json')
-    const fileContents = fs.readFileSync(filePath, 'utf8')
-    const lines = fileContents.trim().split('\n')
-    const allCities = lines.map(line => JSON.parse(line))
-
-    // State name mapping
-    const stateMap: Record<string, string> = {
-      'Texas': 'texas',
-      'Colorado': 'colorado',
-      'Oklahoma': 'oklahoma',
-      'Kansas': 'kansas',
-      'Nebraska': 'nebraska',
-      'Missouri': 'missouri',
-      'Florida': 'florida',
-      'Minnesota': 'minnesota',
-      'Illinois': 'illinois',
-    }
-
-    const params: Array<{ state: string; city: string }> = []
+  // Top cities by state - pre-generate these at build time for immediate SEO
+  const topCities = [
+    // Texas (top 25)
+    { state: 'texas', city: 'houston' },
+    { state: 'texas', city: 'dallas' },
+    { state: 'texas', city: 'austin' },
+    { state: 'texas', city: 'san-antonio' },
+    { state: 'texas', city: 'fort-worth' },
+    { state: 'texas', city: 'el-paso' },
+    { state: 'texas', city: 'arlington' },
+    { state: 'texas', city: 'corpus-christi' },
+    { state: 'texas', city: 'plano' },
+    { state: 'texas', city: 'lubbock' },
+    { state: 'texas', city: 'irving' },
+    { state: 'texas', city: 'laredo' },
+    { state: 'texas', city: 'garland' },
+    { state: 'texas', city: 'frisco' },
+    { state: 'texas', city: 'mckinney' },
+    { state: 'texas', city: 'amarillo' },
+    { state: 'texas', city: 'grand-prairie' },
+    { state: 'texas', city: 'brownsville' },
+    { state: 'texas', city: 'mesquite' },
+    { state: 'texas', city: 'pasadena' },
+    { state: 'texas', city: 'killeen' },
+    { state: 'texas', city: 'denton' },
+    { state: 'texas', city: 'waco' },
+    { state: 'texas', city: 'midland' },
+    { state: 'texas', city: 'abilene' },
     
-    allCities.forEach((item: any) => {
-      const stateSlug = stateMap[item.state]
-      if (stateSlug && item.city) {
-        const citySlug = item.city.toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^a-z0-9-]/g, '')
-        
-        // Pre-generate ALL cities for Google indexing
-        if (!params.some(p => p.state === stateSlug && p.city === citySlug)) {
-          params.push({
-            state: stateSlug,
-            city: citySlug
-          })
-        }
-      }
-    })
+    // Colorado (top 20)
+    { state: 'colorado', city: 'denver' },
+    { state: 'colorado', city: 'colorado-springs' },
+    { state: 'colorado', city: 'aurora' },
+    { state: 'colorado', city: 'fort-collins' },
+    { state: 'colorado', city: 'lakewood' },
+    { state: 'colorado', city: 'thornton' },
+    { state: 'colorado', city: 'arvada' },
+    { state: 'colorado', city: 'westminster' },
+    { state: 'colorado', city: 'pueblo' },
+    { state: 'colorado', city: 'centennial' },
+    { state: 'colorado', city: 'boulder' },
+    { state: 'colorado', city: 'highlands-ranch' },
+    { state: 'colorado', city: 'greeley' },
+    { state: 'colorado', city: 'longmont' },
+    { state: 'colorado', city: 'loveland' },
+    { state: 'colorado', city: 'broomfield' },
+    { state: 'colorado', city: 'grand-junction' },
+    { state: 'colorado', city: 'castle-rock' },
+    { state: 'colorado', city: 'parker' },
+    { state: 'colorado', city: 'commerce-city' },
+    
+    // Florida (top 25)
+    { state: 'florida', city: 'jacksonville' },
+    { state: 'florida', city: 'miami' },
+    { state: 'florida', city: 'tampa' },
+    { state: 'florida', city: 'orlando' },
+    { state: 'florida', city: 'st-petersburg' },
+    { state: 'florida', city: 'hialeah' },
+    { state: 'florida', city: 'tallahassee' },
+    { state: 'florida', city: 'fort-lauderdale' },
+    { state: 'florida', city: 'port-st-lucie' },
+    { state: 'florida', city: 'cape-coral' },
+    { state: 'florida', city: 'pembroke-pines' },
+    { state: 'florida', city: 'hollywood' },
+    { state: 'florida', city: 'miramar' },
+    { state: 'florida', city: 'coral-springs' },
+    { state: 'florida', city: 'clearwater' },
+    { state: 'florida', city: 'miami-gardens' },
+    { state: 'florida', city: 'palm-bay' },
+    { state: 'florida', city: 'west-palm-beach' },
+    { state: 'florida', city: 'pompano-beach' },
+    { state: 'florida', city: 'davie' },
+    { state: 'florida', city: 'lakeland' },
+    { state: 'florida', city: 'miami-beach' },
+    { state: 'florida', city: 'sunrise' },
+    { state: 'florida', city: 'plantation' },
+    { state: 'florida', city: 'boca-raton' },
+    
+    // Oklahoma (top 10)
+    { state: 'oklahoma', city: 'oklahoma-city' },
+    { state: 'oklahoma', city: 'tulsa' },
+    { state: 'oklahoma', city: 'norman' },
+    { state: 'oklahoma', city: 'broken-arrow' },
+    { state: 'oklahoma', city: 'edmond' },
+    { state: 'oklahoma', city: 'lawton' },
+    { state: 'oklahoma', city: 'moore' },
+    { state: 'oklahoma', city: 'midwest-city' },
+    { state: 'oklahoma', city: 'enid' },
+    { state: 'oklahoma', city: 'stillwater' },
+    
+    // Additional states (top cities only)
+    { state: 'kansas', city: 'wichita' },
+    { state: 'kansas', city: 'overland-park' },
+    { state: 'kansas', city: 'kansas-city' },
+    { state: 'kansas', city: 'topeka' },
+    { state: 'kansas', city: 'olathe' },
+    
+    { state: 'nebraska', city: 'omaha' },
+    { state: 'nebraska', city: 'lincoln' },
+    { state: 'nebraska', city: 'bellevue' },
+    { state: 'nebraska', city: 'grand-island' },
+    
+    { state: 'missouri', city: 'kansas-city' },
+    { state: 'missouri', city: 'st-louis' },
+    { state: 'missouri', city: 'springfield' },
+    { state: 'missouri', city: 'columbia' },
+    { state: 'missouri', city: 'independence' },
+    
+    { state: 'minnesota', city: 'minneapolis' },
+    { state: 'minnesota', city: 'st-paul' },
+    { state: 'minnesota', city: 'rochester' },
+    { state: 'minnesota', city: 'duluth' },
+    { state: 'minnesota', city: 'bloomington' },
+    
+    { state: 'illinois', city: 'chicago' },
+    { state: 'illinois', city: 'aurora' },
+    { state: 'illinois', city: 'naperville' },
+    { state: 'illinois', city: 'joliet' },
+    { state: 'illinois', city: 'rockford' },
+  ]
 
-    return params
-  } catch {
-    return []
-  }
+  return topCities
 }
+
+// Enable ISR - other cities are generated on-demand and cached
+export const dynamicParams = true // Allow dynamic city pages not in generateStaticParams
+export const revalidate = 86400 // Revalidate cached pages every 24 hours
 
 // Helper to get nearby cities in same state
 function getNearbyCities(currentCity: string, stateName: string) {
@@ -318,37 +400,37 @@ export default function CityPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Articles Section - SEO Content */}
+        {/* Articles Section - SEO Content with Dedicated URLs */}
         <div className="mt-12 bg-gradient-to-br from-blue-50 to-white rounded-3xl shadow-xl border-2 border-blue-200 p-8">
           <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 text-center">
             {cityName} Roofing Resources
           </h2>
           <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-3">
-            <Link href={`/articles/free-roof-inspection-guide?city=${params.city}&state=${params.state}`} className="bg-white border border-green-200 rounded-xl p-3 hover:shadow-lg transition-all group">
+            <Link href={`/articles/free-roof-inspection-guide?state=${params.state}&city=${params.city}`} className="bg-white border border-green-200 rounded-xl p-3 hover:shadow-lg transition-all group">
               <div className="text-2xl mb-2">🏠</div>
               <h3 className="text-sm font-bold text-gray-900 mb-1 group-hover:text-green-600">Free Inspection</h3>
               <p className="text-xs text-gray-600 mb-2">Get free roof inspection in {cityName}</p>
               <span className="text-xs text-green-600 font-semibold">Read →</span>
             </Link>
-            <Link href={`/articles/hail-damage-roof-replacement?city=${params.city}&state=${params.state}`} className="bg-white border border-purple-200 rounded-xl p-3 hover:shadow-lg transition-all group">
+            <Link href={`/articles/hail-damage-roof-replacement?state=${params.state}&city=${params.city}`} className="bg-white border border-purple-200 rounded-xl p-3 hover:shadow-lg transition-all group">
               <div className="text-2xl mb-2">🌨️</div>
               <h3 className="text-sm font-bold text-gray-900 mb-1 group-hover:text-purple-600">Hail Damage</h3>
               <p className="text-xs text-gray-600 mb-2">Hail damage claims for {cityName}</p>
               <span className="text-xs text-purple-600 font-semibold">Read →</span>
             </Link>
-            <Link href={`/articles/roofing-benefits-guide-2025?city=${params.city}&state=${params.state}`} className="bg-white border border-blue-200 rounded-xl p-3 hover:shadow-lg transition-all group">
+            <Link href={`/articles/roofing-benefits-guide-2025?state=${params.state}&city=${params.city}`} className="bg-white border border-blue-200 rounded-xl p-3 hover:shadow-lg transition-all group">
               <div className="text-2xl mb-2">💰</div>
               <h3 className="text-sm font-bold text-gray-900 mb-1 group-hover:text-blue-600">Benefits Guide</h3>
               <p className="text-xs text-gray-600 mb-2">Roofing benefits in {cityName}</p>
               <span className="text-xs text-blue-600 font-semibold">Read →</span>
             </Link>
-            <Link href={`/articles/storm-damage-claims?city=${params.city}&state=${params.state}`} className="bg-white border border-red-200 rounded-xl p-3 hover:shadow-lg transition-all group">
+            <Link href={`/articles/storm-damage-claims?state=${params.state}&city=${params.city}`} className="bg-white border border-red-200 rounded-xl p-3 hover:shadow-lg transition-all group">
               <div className="text-2xl mb-2">⛈️</div>
               <h3 className="text-sm font-bold text-gray-900 mb-1 group-hover:text-red-600">Storm Claims</h3>
               <p className="text-xs text-gray-600 mb-2">File claims in {cityName}</p>
               <span className="text-xs text-red-600 font-semibold">Read →</span>
             </Link>
-            <Link href={`/articles/home-restoration-tips?city=${params.city}&state=${params.state}`} className="bg-white border border-amber-200 rounded-xl p-3 hover:shadow-lg transition-all group">
+            <Link href={`/articles/home-restoration-tips?state=${params.state}&city=${params.city}`} className="bg-white border border-amber-200 rounded-xl p-3 hover:shadow-lg transition-all group">
               <div className="text-2xl mb-2">🔨</div>
               <h3 className="text-sm font-bold text-gray-900 mb-1 group-hover:text-amber-600">Restoration</h3>
               <p className="text-xs text-gray-600 mb-2">Restoration tips for {cityName}</p>

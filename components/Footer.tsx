@@ -12,16 +12,19 @@ const states = [
   { name: 'Illinois', slug: 'illinois' },
 ]
 
-const blogLinks = [
-  { title: 'Roofing Benefits Guide', slug: 'roofing-benefits-guide-2025' },
-  { title: 'Storm Damage Claims', slug: 'storm-damage-claims' },
-  { title: 'Home Restoration Tips', slug: 'home-restoration-tips' },
+const articles = [
+  { title: 'Free Roof Inspection', slug: 'free-roof-inspection-guide', emoji: '🏠' },
+  { title: 'Hail Damage Guide', slug: 'hail-damage-roof-replacement', emoji: '🌨️' },
+  { title: 'Benefits Guide 2025', slug: 'roofing-benefits-guide-2025', emoji: '💰' },
+  { title: 'Storm Claims', slug: 'storm-damage-claims', emoji: '⛈️' },
+  { title: 'Restoration Tips', slug: 'home-restoration-tips', emoji: '🔨' },
 ]
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 mt-auto border-t-4 border-blue-700">
       <div className="max-w-7xl mx-auto px-4 py-16">
+        {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Company Info */}
           <div className="md:col-span-1">
@@ -63,14 +66,14 @@ export default function Footer() {
           <div>
             <h4 className="text-white text-lg font-black mb-6">Resources</h4>
             <ul className="space-y-2.5">
-              {blogLinks.map((link) => (
-                <li key={link.slug}>
+              {articles.map((article) => (
+                <li key={article.slug}>
                   <Link 
-                    href={`/articles/${link.slug}`}
+                    href={`/articles/${article.slug}`}
                     className="text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-200 flex items-center py-1.5 px-2 rounded group -mx-2"
                   >
-                    <span className="mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity font-bold">→</span>
-                    <span className="font-medium">{link.title}</span>
+                    <span className="mr-2 opacity-70 group-hover:opacity-100 transition-opacity">{article.emoji}</span>
+                    <span className="font-medium">{article.title}</span>
                   </Link>
                 </li>
               ))}
@@ -115,6 +118,35 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* State-Specific Articles Grid - Links to REAL articles */}
+        <div className="mt-12 pt-8 border-t border-gray-800">
+          <h4 className="text-white text-lg font-black mb-6 text-center">Roofing Guides by State</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {states.map((state) => (
+              <div key={state.slug} className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+                <Link 
+                  href={`/state/${state.slug}`}
+                  className="text-white font-bold hover:text-blue-400 transition-colors block mb-3"
+                >
+                  {state.name} Roofing →
+                </Link>
+                <div className="flex flex-wrap gap-1.5">
+                  {articles.slice(0, 3).map((article) => (
+                    <Link
+                      key={article.slug}
+                      href={`/articles/${article.slug}?state=${state.slug}`}
+                      className="text-xs text-gray-400 hover:text-white bg-gray-700/50 hover:bg-gray-700 px-2 py-1 rounded transition-all"
+                      title={`${article.title} - ${state.name}`}
+                    >
+                      {article.emoji} {article.title.split(' ')[0]}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

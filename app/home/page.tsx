@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ShieldCheck, CheckCircle2, FileCheck, Lock, ArrowRight, Zap, Building2 } from 'lucide-react'
+import Footer from '@/components/Footer'
 
 // Structured Data (SEO) - Keep this, it's good logic
 const structuredData = {
@@ -222,23 +223,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* FOOTER IS HANDLED GLOBALLY OR ON PAGE LEVEL - 
-            Since we removed it from layout, we can add a simple one here or use a component */}
-        <footer className="py-8 bg-[#0B1120] border-t border-slate-800 text-center">
-            <div className="max-w-4xl mx-auto px-4">
-                <p className="text-xs text-slate-600 leading-relaxed">
-                    Home Roof Program is a referral service. We connect homeowners with licensed contractors and public adjusters. We do not provide insurance or legal advice. &quot;Allowance&quot; refers to potential policy benefits, not government funds.
-                </p>
-                <div className="flex justify-center gap-6 mt-4 text-xs text-slate-500">
-                    <Link href="/privacy" className="hover:text-emerald-400">Privacy</Link>
-                    <Link href="/terms" className="hover:text-emerald-400">Terms</Link>
-                    <Link href="/contact" className="hover:text-emerald-400">Contact</Link>
-                </div>
-                <p className="mt-4 text-xs text-slate-700">© 2025 Home Roof Program. All Rights Reserved.</p>
-            </div>
-        </footer>
-
       </main>
+      
+      {/* Full Footer with SEO internal linking */}
+      <Footer />
     </>
   )
 }
