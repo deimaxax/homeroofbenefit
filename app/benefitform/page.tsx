@@ -29,12 +29,12 @@ export default function BenefitFormPage({ searchParams }: { searchParams?: { cit
 
   return (
     <>
-      <main className="min-h-screen bg-[#0B1120] text-slate-300 font-sans selection:bg-emerald-500/30 relative overflow-x-hidden pt-16">
+      <main className="min-h-screen bg-[#0B1120] text-slate-300 font-sans selection:bg-emerald-500/30 relative overflow-x-hidden pt-20 sm:pt-16">
         
         <ExitIntent />
 
         {/* SYSTEM NOTICE BANNER */}
-        <div className="bg-[#1e293b]/90 border-b border-slate-700 py-2 relative z-50 backdrop-blur-sm">
+        <div className="bg-[#1e293b]/90 border-b border-slate-700 py-2 relative z-50 backdrop-blur-sm mt-2 sm:mt-0">
           <div className="container mx-auto px-4 text-center flex items-center justify-center gap-2">
             <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
             <p className="text-[10px] sm:text-xs font-mono font-medium text-slate-300 uppercase tracking-widest">
