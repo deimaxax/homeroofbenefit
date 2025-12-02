@@ -1,637 +1,412 @@
-// components/BenefitForm.tsx - HIGH CONVERSION
-
 "use client"
 
-import { useState, useMemo, useEffect, useRef } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Input } from "@/components/ui/input"
-import { CheckCircle2, ArrowRight, ArrowLeft, Clock, Users, Shield } from 'lucide-react'
-import AnalysisLoader from './AnalysisLoader'
+import { useLoadScript } from "@react-google-maps/api" 
+import { getGeocode, getLatLng } from "use-places-autocomplete"
+import { 
+  CheckCircle2, ArrowRight, ShieldCheck, Lock, Search, 
+  FileText, Loader2, AlertCircle 
+} from 'lucide-react'
 import { trackEvent } from '@/lib/analytics'
+
+import AddressAutocomplete from './AddressAutocomplete'
+
+const LIBRARIES: ("places")[] = ["places"]
+
+const SystemAuditLog = ({ address, city, onComplete }: { address: string, city: string, onComplete: () => void }) => {
+  const displayAddr = address ? address.split(',')[0] : 'Property'
+  
+  const [steps, setSteps] = useState([
+    { text: `Locating property at ${displayAddr}...`, status: 'pending' },
+    { text: `Accessing ${city} municipal zoning records...`, status: 'pending' },
+    { text: 'Measuring roof surface area (Satellite)...', status: 'pending' },
+    { text: 'Checking active storm dates in region...', status: 'pending' },
+    { text: 'Finalizing eligibility report...', status: 'pending' }
+  ])
+  
+  useEffect(() => {
+    let currentStep = 0
+    const interval = setInterval(() => {
+      setSteps(prev => prev.map((s, i) => {
+        if (i < currentStep) return { ...s, status: 'complete' }
+        if (i === currentStep) return { ...s, status: 'active' }
+        return s
+      }))
+      currentStep++
+      if (currentStep > steps.length) {
+        clearInterval(interval)
+        setTimeout(onComplete, 800)
+      }
+    }, 800)
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="bg-[#0f172a] border border-slate-700 rounded-lg p-5 w-full">
+      <div className="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
+        <Loader2 className="w-4 h-4 text-emerald-500 animate-spin" />
+        <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">Live Database Scan</span>
+      </div>
+      <div className="space-y-3">
+        {steps.map((step, i) => (
+          <div key={i} className="flex items-center gap-3">
+             <div className={`w-4 h-4 rounded-full flex items-center justify-center border ${
+                step.status === 'complete' ? 'bg-emerald-500 border-emerald-500' :
+                step.status === 'active' ? 'border-emerald-500/50 animate-pulse' :
+                'border-slate-700 bg-slate-800'
+             }`}>
+                {step.status === 'complete' && <CheckCircle2 className="w-3 h-3 text-white" />}
+             </div>
+             <span className={`text-xs font-mono transition-colors ${
+                step.status === 'active' ? 'text-emerald-400 font-bold' : 
+                step.status === 'complete' ? 'text-slate-400' : 'text-slate-600'
+             }`}>
+                {step.text}
+             </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 interface BenefitFormProps {
   defaultState?: string
   defaultCity?: string
+  caseRef?: string
   spotsLeft?: number
 }
 
-const calculateEstimateRange = (_issues: string[]): { min: number; max: number } => {
-  // Fixed high-conversion range to avoid subconscious downsell.
-  // Always show $16,500 – $24,200 as requested.
-  return { min: 16500, max: 24200 }
-}
+export default function BenefitForm({ defaultState, defaultCity, caseRef, spotsLeft }: BenefitFormProps) {
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "",
+    libraries: LIBRARIES,
+  })
 
-export default function BenefitForm({ defaultState, defaultCity, spotsLeft = 7 }: BenefitFormProps) {
-  const [step, setStep] = useState(1)
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [isEligible, setIsEligible] = useState(false)
+  const [step, setStep] = useState(1) 
+  const [zipCode, setZipCode] = useState('')
+  const [streetAddress, setStreetAddress] = useState('')
   const [propertyIssues, setPropertyIssues] = useState<string[]>([])
+  const [formData, setFormData] = useState({ name: '', phone: '' })
   
-  const [formData, setFormData] = useState({ name: '', phone: '', zipCode: '' })
-  const [consent, setConsent] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [zipLocation, setZipLocation] = useState<google.maps.LatLngLiteral | null>(null)
+  const [isGeocoding, setIsGeocoding] = useState(false)
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [showError, setShowError] = useState(false)
-  const [isShaking, setIsShaking] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  // Ref for scroll control
-  const formContainerRef = useRef<HTMLDivElement>(null)
-  const [containerHeight, setContainerHeight] = useState<number | null>(null)
+  const displayCity = useMemo(() => defaultCity || 'Your Area', [defaultCity])
+  const TOTAL_STEPS = 5
 
-  // Capture initial height to prevent layout shifts
-  useEffect(() => {
-    if (formContainerRef.current && !containerHeight) {
-      setContainerHeight(formContainerRef.current.offsetHeight)
-    }
-  }, [])
-
-  const totalSteps = 2
-  const nextStep = () => {
-    const newStep = step + 1
-    setStep(newStep)
-    trackEvent('form_step_completed', {
-      from_step: step,
-      to_step: newStep,
-      city: displayCity,
-      state: defaultState
-    })
-  }
-  const prevStep = () => setStep(s => Math.max(1, s - 1))
-
-  // LIVE COUNTER - Social proof
-  const [recentClaim, setRecentClaim] = useState('')
-  
-  useEffect(() => {
-    // Fake recent claims for social proof
-    const names = ['Michael R.', 'Sarah T.', 'James L.', 'Jennifer M.', 'Robert K.', 'Lisa H.']
-    const amounts = ['$15,400', '$19,200', '$18,800', '$18,500', '$16,300', '$21,900']
-    const idx = Math.floor(Math.random() * names.length)
-    setRecentClaim(`${names[idx]} qualified for ${amounts[idx]}`)
-  }, [])
-
-  const estimateRange = useMemo(() => calculateEstimateRange(propertyIssues), [propertyIssues])
-  const benefitAmount = estimateRange.max
-
-  const displayCity = useMemo(() => {
-    if (!defaultCity) return 'Your Area'
-    return defaultCity.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-  }, [defaultCity])
-
-  const toggleIssue = (issue: string) => {
-    const isAdding = !propertyIssues.includes(issue)
-    setPropertyIssues(prev => 
-      prev.includes(issue) ? prev.filter(i => i !== issue) : [...prev, issue]
-    )
-    // Clear error kada user pasirenka
-    if (showError) setShowError(false)
-    
-    // Track issue selection
-    if (isAdding) {
-      trackEvent('issue_selected', {
-        issue: issue,
-        total_issues: propertyIssues.length + 1,
-        city: displayCity
-      })
-    }
-  }
-
-  const handleNextStep = () => {
-    if (propertyIssues.length === 0) {
-      // Shake + error
-      setIsShaking(true)
-      setShowError(true)
-      setTimeout(() => setIsShaking(false), 500)
-      return
-    }
-    setShowError(false)
-    nextStep()
-  }
-
-  const startAnalysis = () => setIsAnalyzing(true)
-  const handleAnalysisComplete = () => {
-    setIsAnalyzing(false)
-    setIsEligible(true)
-    setStep(3)
-  }
-
-  const formatPhone = (value: string) => {
-    const digits = value.replace(/\D/g, '').slice(0, 10)
-    if (digits.length <= 3) return digits
-    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`
-    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
-  }
-
-  const formatZip = (value: string) => value.replace(/\D/g, '').slice(0, 5)
-
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-    if (!formData.name.trim() || formData.name.trim().length < 2) {
-      newErrors.name = 'Enter your name'
-    }
-    const phoneDigits = formData.phone.replace(/\D/g, '')
-    if (phoneDigits.length !== 10) {
-      newErrors.phone = 'Enter valid phone'
-    }
-    if (formData.zipCode.length !== 5) {
-      newErrors.zipCode = 'Enter ZIP code'
-    }
-    if (!consent) {
-      newErrors.consent = 'Required'
-    }
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  // --- STEP 1: ZIP ---
+  const handleZipSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!validateForm()) return
+    if (zipCode.length < 5) { setError("Enter valid Zip Code"); return }
     
+    setError(null)
+    setIsGeocoding(true)
+
+    try {
+        const results = await getGeocode({ address: zipCode + " USA" }) 
+        const { lat, lng } = getLatLng(results[0])
+        
+        setZipLocation({ lat, lng })
+        
+        // @ts-ignore
+        trackEvent('form_step_completed', { step: 1, zip: zipCode, geocoded: true })
+        
+        setStep(2)
+    } catch (err) {
+        console.error("Geocoding failed", err)
+        // @ts-ignore
+        trackEvent('form_step_completed', { step: 1, zip: zipCode, fallback: true })
+        setStep(2)
+    } finally {
+        setIsGeocoding(false)
+    }
+  }
+
+  // --- STEP 2: ADDRESS ---
+  const [addressSelected, setAddressSelected] = useState(false)
+  
+  const handleAddressSelect = (addr: string, zip: string, city: string, state: string) => {
+      setStreetAddress(addr)
+      // Track if a valid address was selected (empty addr means selection was cleared)
+      const isSelected = addr.length > 0
+      setAddressSelected(isSelected)
+      
+      if (zip) setZipCode(zip)
+      
+      // Clear error immediately if we have a selection
+      if (isSelected) setError(null)
+  }
+
+  const handleAddressStepSubmit = (e: React.FormEvent) => {
+      e.preventDefault()
+      // Check if address was properly selected from dropdown, not just typed
+      if (!addressSelected || streetAddress.length < 5) { 
+          setError("Please select a valid address from the dropdown list")
+          return 
+      }
+      setError(null)
+      setStep(3)
+      // @ts-ignore
+      trackEvent('form_step_completed', { step: 2, address_length: streetAddress.length })
+  }
+
+  // --- STEP 3: ISSUES ---
+  const handleIssuesSubmit = () => {
+    if (propertyIssues.length === 0) { setError("Select at least one issue"); return }
+    setStep(4)
+  }
+
+  // --- STEP 4: OWNER ---
+  const handleOwnerSelect = (type: 'owner' | 'renter') => {
+    if (type === 'renter') return; 
+    setStep(5)
+  }
+
+  // --- STEP 6: FINAL SUBMIT ---
+  const handleFinalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (formData.name.length < 3 || formData.phone.length < 10) {
+        setError("Please enter valid contact details")
+        return
+    }
+
     setIsSubmitting(true)
+    setError(null)
     
     try {
-      let utm: Record<string, string> = {}
-      let referrer = ''
-      let sessionId = ''
-      if (typeof window !== 'undefined') {
-        const params = new URLSearchParams(window.location.search)
-        ;['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(k => {
-          const v = params.get(k)
-          if (v) utm[k] = v
-        })
-        referrer = document.referrer || ''
-        sessionId = localStorage.getItem('hbc_session') || ''
-        if (!sessionId) {
-          sessionId = Math.random().toString(36).slice(2) + Date.now().toString(36)
-          localStorage.setItem('hbc_session', sessionId)
-        }
-      }
-
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          city: defaultCity,
-          state: defaultState,
-          propertyIssues,
-          estimatedBenefit: benefitAmount,
+          name: formData.name,
+          phone: formData.phone.replace(/\D/g, ''),
+          zipCode: zipCode,
+          streetAddress: streetAddress,
+          propertyIssues: propertyIssues,
           source: 'benefit-form',
-          consent: true,
-          consent_ts: new Date().toISOString(),
-          utm,
-          referrer,
-          sessionId,
-        }),
+          createdAt: new Date().toISOString(),
+        })
       })
 
-      const result = await response.json()
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Failed to submit')
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Submission failed')
       }
-      
-      // Track successful submission
-      trackEvent('lead_submitted_success', {
-        city: formData.zipCode,
-        issues_count: propertyIssues.length,
-        has_email: !!formData.name,
-        conversion_value: 100 // Assign lead value
+
+      // @ts-ignore
+      trackEvent('lead_submitted_success', { 
+        leadId: data.leadId,
+        address: streetAddress 
       })
       
-      // Blur active input to prevent mobile keyboard scroll
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur()
-      }
-      
       setIsSubmitted(true)
-      
-      // Scroll form into view smoothly
-      setTimeout(() => {
-        formContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 100)
-    } catch (error) {
-      console.error('Submission error:', error)
-      
-      // Track submission error
-      trackEvent('lead_submission_error', {
-        error: error instanceof Error ? error.message : 'Unknown error',
-        city: formData.zipCode,
-        step: step
-      })
-      
-      // Blur active input to prevent mobile keyboard scroll
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur()
-      }
-      
-      setIsSubmitted(true)
-      
-      // Scroll form into view smoothly
-      setTimeout(() => {
-        formContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 100)
+    } catch (err) {
+      console.error('Lead submission error:', err)
+      setError('Connection error. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // SUBMITTED
-  // ═══════════════════════════════════════════════════════════════
-  if (isSubmitted) {
-    const phoneDisplay = '(479) 844-1144'
-    const phoneTel = '+14798441144'
-    return (
-      <div 
-        ref={formContainerRef} 
-        className="text-center py-8 flex flex-col justify-center"
-        style={{ minHeight: containerHeight ? `${containerHeight}px` : 'auto' }}
-      >
-        <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-8 h-8 text-emerald-600" />
-        </div>
-        <h2 className="text-xl font-bold text-slate-900 mb-2">SUCCESS! Your Property is Pre-Qualified.</h2>
-        <p className="text-slate-600 text-sm mb-3">
-          A Senior Claims Specialist is reviewing your file RIGHT NOW to confirm your potential payout.
+  if (loadError) return <div className="text-red-500 text-center p-4">System Error: Maps API failed to load. Please refresh.</div>
+
+  if (isSubmitted) return (
+    <div className="text-center py-8 text-white animate-in zoom-in-95">
+      <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/20">
+          <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+      </div>
+      <h2 className="text-2xl font-bold mb-2">Eligibility Confirmed</h2>
+      <p className="text-slate-400 mb-6">File ID: <span className="text-emerald-400 font-mono">{caseRef || 'PENDING'}</span></p>
+      
+      <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700 max-w-sm mx-auto">
+        <p className="text-xs text-slate-300">
+            A Senior Specialist is reviewing <span className="text-white font-bold">{streetAddress}</span>.
+            Expect a call within <span className="text-emerald-400 font-bold">5 minutes</span> to finalize inspection.
         </p>
-
-        <p className="text-sm text-slate-700 font-semibold mb-2">You will receive a call in exactly 3 MINUTES.</p>
-
-        <p className="text-sm text-slate-600 mb-4">Look out for an incoming call from: <span className="font-bold">{phoneDisplay}</span></p>
-
-        <div className="flex justify-center mb-2">
-          <a
-            href={`tel:${phoneTel}`}
-            className="inline-flex items-center justify-center bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl px-6 py-3 text-lg shadow-lg"
-            aria-label={`Call us now ${phoneDisplay}`}
-          >
-            SKIP THE LINE & CALL US NOW
-          </a>
-        </div>
-
-        <p className="text-xs text-slate-400">Please answer calls from this number — it's our Claims Team.</p>
       </div>
-    )
-  }
+    </div>
+  )
 
-  // ═══════════════════════════════════════════════════════════════
-  // LEAD CAPTURE (Step 3)
-  // ═══════════════════════════════════════════════════════════════
-  if (isEligible && step === 3) {
-    return (
-      <div 
-        ref={formContainerRef} 
-        className="w-full"
-        style={{ minHeight: containerHeight ? `${containerHeight}px` : 'auto' }}
-      >
-        {/* Progress Bar - 85% Complete */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-bold text-slate-700">Pending Final Verification...</p>
-            <span className="text-xs font-semibold text-slate-500">85%</span>
-          </div>
-          <div className="relative h-3 bg-slate-200 rounded-full overflow-hidden">
-            <div className="absolute inset-0 flex">
-              {/* Completed 85% */}
-              <div className="w-[85%] bg-gradient-to-r from-emerald-500 to-teal-600" />
-              {/* Pulsing final 15% */}
-              <div className="w-[15%] bg-amber-400 animate-pulse" />
-            </div>
-          </div>
-        </div>
-
-        {/* Success Badge */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-bold mb-4">
-            <CheckCircle2 className="w-4 h-4" />
-            You Pre-Qualify!
-          </div>
-          
-          {/* Benefit Amount - Hero */}
-          <div className="bg-gradient-to-br from-emerald-600 to-teal-600 text-white rounded-2xl p-6 shadow-xl shadow-emerald-600/20">
-            <p className="text-sm opacity-90 mb-1">Your Estimated Benefit</p>
-            <p className="text-4xl sm:text-5xl font-black">
-              ${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}
-            </p>
-            <p className="text-emerald-100 text-sm mt-2">in roof restoration coverage</p>
-          </div>
-        </div>
-
-        {/* Urgency Badge - Inline */}
-        <div className="flex items-center justify-center gap-2 mb-5">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-          </span>
-          <span className="text-sm text-amber-700 font-medium">
-            Only <span className="font-bold">{spotsLeft} spots</span> left this week
-          </span>
-        </div>
-
-        {/* Clean Form */}
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <Input 
-              placeholder="Full Name" 
-              value={formData.name}
-              onChange={(e) => {
-                setFormData(prev => ({ ...prev, name: e.target.value }))
-                if (errors.name) setErrors(prev => ({ ...prev, name: '' }))
-              }}
-              className={`h-14 text-base bg-white rounded-xl ${errors.name ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20'}`}
-            />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-          </div>
-
-          <div>
-            <p className="text-xs text-slate-600 font-medium mb-2"></p>
-            <Input 
-              placeholder="Mobile Number (For Eligibility Report)" 
-              type="tel"
-              inputMode="tel"
-              value={formData.phone}
-              onChange={(e) => {
-                setFormData(prev => ({ ...prev, phone: formatPhone(e.target.value) }))
-                if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }))
-              }}
-              className={`h-14 text-base bg-white rounded-xl ${errors.phone ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20'}`}
-            />
-            {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
-          </div>
-
-          <div>
-            <Input
-              placeholder="ZIP Code"
-              inputMode="numeric"
-              value={formData.zipCode}
-              onChange={(e) => {
-                setFormData(prev => ({ ...prev, zipCode: formatZip(e.target.value) }))
-                if (errors.zipCode) setErrors(prev => ({ ...prev, zipCode: '' }))
-              }}
-              className={`h-14 text-base bg-white rounded-xl ${errors.zipCode ? 'border-red-500 ring-2 ring-red-100' : 'border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20'}`}
-            />
-            {errors.zipCode && <p className="text-red-500 text-xs mt-1">{errors.zipCode}</p>}
-          </div>
-
-          {/* TCPA Consent - Cleaner */}
-          <label className={`flex items-start gap-3 p-4 rounded-xl cursor-pointer border-2 transition-colors duration-100 ${
-            consent ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200 hover:border-slate-300'
-          }`}>
-            <div className={`w-5 h-5 mt-0.5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors duration-100 ${
-              consent ? 'bg-emerald-600 border-emerald-600' : 'border-slate-300'
-            }`}>
-              {consent && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
-            </div>
-            <input
-              type="checkbox"
-              checked={consent}
-              onChange={(e) => {
-                setConsent(e.target.checked)
-                if (errors.consent) setErrors(prev => ({ ...prev, consent: '' }))
-              }}
-              className="sr-only"
-            />
-            <span className="text-[9.5px] text-slate-400 leading-relaxed">
-              I agree to receive calls/texts from Home Roof Program and 
-              <a href="/partners" className="underline mx-0.5 hover:text-slate-700">partners</a> 
-              at this number. Consent not required to purchase. 
-              <a href="/privacy" className="underline mx-0.5 hover:text-slate-700">Privacy</a> • 
-              <a href="/terms" className="underline mx-0.5 hover:text-slate-700">Terms</a>
-            </span>
-          </label>
-          {errors.consent && <p className="text-red-500 text-xs">{errors.consent}</p>}
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-slate-400 disabled:to-slate-400 text-white font-bold text-lg rounded-xl transition-colors duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30"
-          >
-            {isSubmitting ? (
-              <span className="flex items-center gap-2">
-                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                Confirming...
-              </span>
-            ) : (
-              <>Unlock My Claim Estimate <ArrowRight className="w-5 h-5" /></>
-            )}
-          </button>
-
-          {/* Trust footer - minimal */}
-          <div className="flex items-center justify-center gap-5 pt-3 text-xs text-slate-400">
-            <span className="flex items-center gap-1">
-              <Shield className="w-3.5 h-3.5" /> Secure
-            </span>
-            <span className="flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5" /> Free
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" /> 15min response
-            </span>
-          </div>
-        </form>
-      </div>
-    )
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // ANALYZING
-  // ═══════════════════════════════════════════════════════════════
-  if (isAnalyzing) {
-    return (
-      <div 
-        ref={formContainerRef}
-        className="w-full"
-        style={{ minHeight: containerHeight ? `${containerHeight}px` : 'auto' }}
-      >
-        <AnalysisLoader onComplete={handleAnalysisComplete} city={displayCity} state={defaultState} />
-      </div>
-    )
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // MAIN FORM STEPS
-  // ═══════════════════════════════════════════════════════════════
   return (
-    <div 
-      ref={formContainerRef} 
-      className="w-full"
-    >
-      {/* Premium Progress Indicator */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-150 ${
-            step >= 1 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
-          }`}>1</div>
-          <div className={`w-12 h-1 rounded-full transition-colors duration-150 ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-200'}`} />
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-150 ${
-            step >= 2 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
-          }`}>2</div>
-        </div>
-        <span className="text-xs text-slate-400 font-medium">Step {step} of 2</span>
+    <div className="w-full relative min-h-[450px]">
+      
+      <div className="flex items-center justify-between mb-6 px-1">
+         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+            Step {step > 5 ? 5 : step} of {TOTAL_STEPS}
+         </span>
+         <div className="flex gap-1">
+            {Array.from({length: TOTAL_STEPS}).map((_, i) => (
+            <div key={i} className={`h-1.5 w-6 rounded-full transition-all duration-500 ${step > i ? 'bg-emerald-500' : 'bg-slate-800'}`} />
+            ))}
+         </div>
       </div>
 
       <AnimatePresence mode="wait">
         
-        {/* STEP 1 – Issues */}
+        {/* STEP 1: ZIP CODE */}
         {step === 1 && (
-          <motion.div 
-            key="issues" 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.1 }}
-          >
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">
-              Does Insurance Owe You a New Roof?
-            </h3>
-            <p className="text-slate-500 text-sm mb-5">Select all that apply to your home</p>
+          <motion.form key="step1" onSubmit={handleZipSubmit} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
+            <h3 className="text-lg font-bold text-white mb-2">Verify Property Location</h3>
+            <p className="text-slate-400 text-xs mb-4">Enter Zip Code to check regional storm data.</p>
+            <div className="relative mb-4">
+               <Search className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" />
+               <input 
+                  type="text" inputMode="numeric" placeholder="Enter Zip Code" value={zipCode}
+                  onChange={(e) => { setZipCode(e.target.value.replace(/\D/g,'').slice(0,5)); setError(null) }}
+                  className="w-full bg-[#0f172a] border border-slate-700 rounded-lg py-3 pl-11 text-white text-lg tracking-wider focus:border-emerald-500 outline-none"
+                  autoFocus
+               />
+            </div>
+            {error && <p className="text-red-400 text-xs mb-3 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> {error}</p>}
             
-            <div className="space-y-2.5 mb-5">
+            <button 
+                type="submit" 
+                disabled={isGeocoding}
+                className="w-full bg-white text-slate-900 font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 hover:bg-slate-100 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isGeocoding ? (
+                  <><Loader2 className="w-4 h-4 animate-spin text-slate-600"/> Checking Region...</>
+              ) : (
+                  <>Check Database <ArrowRight className="w-4 h-4" /></>
+              )}
+            </button>
+          </motion.form>
+        )}
+
+        {/* STEP 2: ADDRESS */}
+        {step === 2 && (
+          <motion.form key="step2" onSubmit={handleAddressStepSubmit} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
+            <h3 className="text-lg font-bold text-white mb-2">Locate Property</h3>
+            <p className="text-slate-400 text-xs mb-4">
+                Verify address for <span className="text-emerald-400 font-medium">satellite roof analysis</span>.
+            </p>
+            
+            <div className="mb-4 relative z-20">
+               {isLoaded ? (
+                   <AddressAutocomplete 
+                      onSelect={handleAddressSelect} 
+                      defaultValue={streetAddress}
+                      biasLocation={zipLocation}
+                      zipCode={zipCode} 
+                   />
+               ) : (
+                   <div className="w-full h-12 bg-slate-800 rounded animate-pulse flex items-center px-4 text-slate-500 text-sm">Loading Maps API...</div>
+               )}
+            </div>
+            
+            {error && <p className="text-red-400 text-xs mb-3 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> {error}</p>}
+            
+            <button type="submit" className="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-all">
+              Verify This Address <ArrowRight className="w-4 h-4" />
+            </button>
+          </motion.form>
+        )}
+
+        {/* STEP 3: ISSUES */}
+        {step === 3 && (
+          <motion.div key="step3" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
+            <h3 className="text-lg font-bold text-white mb-4">Select Damage Indicators</h3>
+            <div className="space-y-3 mb-4">
               {[
-                { id: 'storm-damage', text: "Storm or hail damage", icon: "⛈️", popular: true },
-                { id: 'old-roof', text: "Roof is 10+ years old", icon: "🏠" },
-                { id: 'leaks', text: "Leaks or water stains", icon: "💧" },
-                { id: 'high-bills', text: "High energy bills", icon: "⚡" }
-              ].map((item) => (
-                <label
-                  key={item.id}
-                  className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-colors duration-100 ${
-                    propertyIssues.includes(item.id)
-                      ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500/20'
-                      : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <input 
-                    type="checkbox" 
-                    checked={propertyIssues.includes(item.id)}
-                    onChange={() => toggleIssue(item.id)}
-                    className="sr-only" 
-                  />
-                  <span className="text-xl">{item.icon}</span>
-                  <span className={`font-semibold flex-1 ${propertyIssues.includes(item.id) ? 'text-emerald-900' : 'text-slate-700'}`}>
-                    {item.text}
-                  </span>
-                  {'popular' in item && item.popular && !propertyIssues.includes(item.id) && (
-                    <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-bold uppercase">Most Common</span>
-                  )}
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors duration-100 ${
-                    propertyIssues.includes(item.id)
-                      ? 'bg-emerald-600 border-emerald-600'
-                      : 'border-slate-300'
-                  }`}>
-                    {propertyIssues.includes(item.id) && (
-                      <CheckCircle2 className="w-4 h-4 text-white" />
-                    )}
+                { id: 'hail', label: 'Hail / Storm Activity', icon: '⛈️' },
+                { id: 'age', label: 'Roof Age > 10 Years', icon: '🏚️' },
+                { id: 'leaks', label: 'Visible Wear / Leaks', icon: '💧' }
+              ].map(opt => (
+                <div key={opt.id} onClick={() => {
+                    const exists = propertyIssues.includes(opt.id)
+                    setPropertyIssues(exists ? propertyIssues.filter(x => x !== opt.id) : [...propertyIssues, opt.id])
+                    setError(null)
+                }} 
+                className={`p-3.5 rounded-lg border cursor-pointer flex items-center gap-3 transition-all ${propertyIssues.includes(opt.id) ? 'bg-emerald-950/30 border-emerald-500/50' : 'bg-[#0f172a] border-slate-700'}`}>
+                  <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${propertyIssues.includes(opt.id) ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600'}`}>
+                    {propertyIssues.includes(opt.id) && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </div>
-                </label>
+                  <span className="text-lg">{opt.icon}</span>
+                  <span className="text-sm font-medium text-slate-300">{opt.label}</span>
+                </div>
               ))}
             </div>
-
-            {/* Live Estimate Card - Compact Premium */}
-            <div className={`rounded-xl px-4 py-3 mb-4 transition-colors duration-150 ${
-              propertyIssues.length > 0 
-                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md' 
-                : 'bg-slate-100 text-slate-500'
-            }`}>
-              {propertyIssues.length > 0 ? (
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium opacity-90">Your Benefit:</span>
-                  <span className="text-xl sm:text-2xl font-black">${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}</span>
-                </div>
-              ) : (
-                <p className="text-sm text-center">TAP ONE TO REVEAL PAYOUT</p>
-              )}
-            </div>
-
-            {showError && (
-              <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-center">
-                <p className="text-red-600 text-sm font-semibold">⚠️ Please select at least one issue above</p>
-              </div>
-            )}
-
-            <button
-              onClick={handleNextStep}
-              className={`w-full h-14 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-lg rounded-xl transition-colors duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 ${
-                isShaking ? 'animate-shake' : ''
-              }`}
-            >
-              CONFIRM $0 PAYOUT <ArrowRight className="w-5 h-5" />
+            {error && <p className="text-red-400 text-xs mb-3">{error}</p>}
+            <button onClick={handleIssuesSubmit} className="w-full bg-white text-slate-900 font-bold py-3.5 rounded-lg flex items-center justify-center gap-2">
+              Confirm Damage <ArrowRight className="w-4 h-4" />
             </button>
-            
-            {/* Social proof */}
-            <div className="flex items-center justify-center gap-2 mt-4 text-xs text-slate-400">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span>{recentClaim} — 2 min ago</span>
-            </div>
           </motion.div>
         )}
 
-        {/* STEP 2 – Homeowner */}
-        {step === 2 && (
-          <motion.div 
-            key="owner" 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.1 }}
-          >
-            <button onClick={prevStep} className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 text-sm mb-5 transition-colors">
-              <ArrowLeft className="w-4 h-4" /> Back
+        {/* STEP 4: OWNERSHIP */}
+        {step === 4 && (
+          <motion.div key="step4" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
+            <h3 className="text-lg font-bold text-white mb-2">Verify Ownership</h3>
+            <p className="text-slate-400 text-xs mb-6">Are you the legal owner of <span className="text-white font-mono">{streetAddress || 'this property'}</span>?</p>
+            <button onClick={() => handleOwnerSelect('owner')} className="w-full mb-3 p-4 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-lg shadow-lg text-left hover:from-emerald-500 hover:to-teal-600 transition-all">
+              <span className="font-bold flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> Yes, I am the Property Owner</span>
             </button>
-
-            {/* Value reminder - compact */}
-            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl p-4 mb-5 text-center">
-              <p className="text-xs text-emerald-600 font-medium uppercase tracking-wider mb-1">Your Potential Benefit</p>
-              <p className="text-2xl font-black text-emerald-700">${estimateRange.min.toLocaleString()} – ${estimateRange.max.toLocaleString()}</p>
-            </div>
-
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">Do you own your home?</h3>
-            <p className="text-slate-500 text-sm mb-5">This program is exclusively for homeowners</p>
-            
-            <div className="space-y-3">
-              <button
-                onClick={startAnalysis}
-                className="w-full p-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl transition-colors duration-150 text-left shadow-lg shadow-emerald-600/25 group"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="font-bold text-lg block">Yes, I own my home</span>
-                    <span className="text-sm text-emerald-100 mt-1 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4" /> Proceed to Final Step
-                    </span>
-                  </div>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-              
-              <button disabled className="w-full p-4 bg-slate-100 text-slate-400 rounded-xl cursor-not-allowed text-left">
-                <span className="font-medium">No, I'm renting</span>
-                <span className="block text-xs mt-0.5">Program is for homeowners only</span>
-              </button>
-            </div>
-
-            {/* Trust signals */}
-            <div className="flex items-center justify-center gap-5 mt-6 pt-5 border-t border-slate-100">
-              <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                <Shield className="w-4 h-4 text-emerald-500" />
-                <span>Licensed</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <span>100% Free</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                <Clock className="w-4 h-4 text-emerald-500" />
-                <span>2 min</span>
-              </div>
-            </div>
+            <button disabled className="w-full p-4 bg-slate-800/50 border border-slate-700 text-slate-500 rounded-lg text-left flex justify-between opacity-60 cursor-not-allowed">
+              <span className="font-medium text-sm">I am a Renter</span>
+              <span className="text-[10px] bg-slate-800 px-1 rounded">Ineligible</span>
+            </button>
           </motion.div>
+        )}
+
+        {/* STEP 5: SYSTEM LOG */}
+        {step === 5 && (
+          <motion.div key="step5" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+             <SystemAuditLog address={streetAddress} city={displayCity} onComplete={() => setStep(6)} />
+          </motion.div>
+        )}
+
+        {/* STEP 6: FINAL CAPTURE */}
+        {step === 6 && (
+            <motion.div key="step6" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+               <div className="bg-slate-800/40 border border-blue-500/20 p-3.5 rounded-lg mb-5 flex gap-3 items-start">
+                  <ShieldCheck className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-blue-100 text-xs font-bold uppercase mb-1">Secure Result Delivery</p>
+                    <p className="text-slate-400 text-[10px] leading-relaxed">
+                      Results for <span className="text-blue-200">{streetAddress}</span> are ready. Verify identity to view report.
+                    </p>
+                  </div>
+              </div>
+
+               <form onSubmit={handleFinalSubmit} className="space-y-4">
+                   <div>
+                       <label className="text-[10px] uppercase font-bold text-slate-500 mb-1 block">Full Name</label>
+                       <input type="text" placeholder="Legal Name" className="w-full h-12 px-4 rounded-lg bg-[#0f172a] border border-slate-700 text-white focus:border-emerald-500 outline-none" required onChange={e => setFormData({...formData, name: e.target.value})} />
+                   </div>
+                   <div>
+                        <div className="flex justify-between items-center mb-1">
+                            <label className="text-[10px] uppercase font-bold text-slate-500">Phone Number</label>
+                            <span className="flex items-center gap-1 text-[9px] text-emerald-500"><Lock className="w-2.5 h-2.5"/> Encrypted</span>
+                        </div>
+                       <input 
+                         type="tel" 
+                         placeholder="(555) 123-4567" 
+                         className="w-full h-12 px-4 rounded-lg bg-[#0f172a] border border-slate-700 text-white font-mono text-lg focus:border-emerald-500 outline-none" 
+                         required 
+                         onChange={e => {
+                            const x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                            const formatted = !x ? '' : !x[2] ? x[1] : `(${x[1]}) ${x[2]}${x[3] ? `-${x[3]}` : ''}`;
+                            setFormData({...formData, phone: formatted})
+                         }} 
+                         value={formData.phone}
+                        />
+                   </div>
+                   
+                   {error && <p className="text-red-400 text-xs text-center">{error}</p>}
+                   
+                   <button type="submit" disabled={isSubmitting} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-lg shadow-lg shadow-emerald-900/40 transition-all flex items-center justify-center gap-2">
+                       {isSubmitting ? <><Loader2 className="animate-spin w-5 h-5"/> Processing...</> : <>View Secure Report <FileText className="w-5 h-5"/></>}
+                   </button>
+               </form>
+            </motion.div>
         )}
 
       </AnimatePresence>

@@ -23,6 +23,7 @@ export type EventName =
   | 'scroll_depth'
   | 'exit_intent_triggered'
   | 'mobile_cta_clicked'
+  | 'zip_auto_detected'
 
 export interface EventData {
   [key: string]: string | number | boolean | undefined

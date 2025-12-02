@@ -1,462 +1,219 @@
-  // app/benefitform/page.tsx - COMPLIANT VERSION
+// app/benefitform/page.tsx
 
-  import { headers } from 'next/headers'
-  import BenefitForm from '@/components/BenefitForm'
-  import ExitIntent from '@/components/ExitIntent'
-  import MobileCTA from '@/components/MobileCTA'
-  import { Analytics } from "@vercel/analytics/next"
-  import Link from 'next/link'
-  import { Button } from '@/components/ui/button'
+import { headers } from 'next/headers'
+import BenefitForm from '@/components/BenefitForm'
+import ExitIntent from '@/components/ExitIntent'
+import MobileCTA from '@/components/MobileCTA'
+import LiveTicker from '@/components/LiveTicker'
+import Link from 'next/link'
+import { ShieldCheck, Lock, Activity, Database, CheckCircle2 } from 'lucide-react'
 
-  export default function BenefitFormPage({ searchParams }: { searchParams?: { city?: string, state?: string, county?: string } }) {
-    const headersList = headers()
-    const city = searchParams?.city || headersList.get('x-user-city') || 'Your City'
-    const region = searchParams?.state || headersList.get('x-user-region') || 'US'
-    const county = searchParams?.county
-    
-    // Format location for display
-    const locationName = county 
-      ? `${county.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} County`
-      : city !== 'Your City'
-      ? city.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-      : null
-      
-    const stateParam = searchParams?.state || region.toLowerCase()
-    const cityParam = searchParams?.city || city.toLowerCase().replace(/\s+/g, '-')
-    
-    // Generate random spots left (3-9) - same for all components
-    const spotsLeft = Math.floor(Math.random() * 7) + 3
-    
-    // Generate random claim file ID (RC-1000 to RC-9999)
-    const claimFileId = `RC-${Math.floor(Math.random() * 9000) + 1000}`
+// 1. IMPORTUOJAME NUOTRAUKĄ (SVARBU)
+// ".." reiškia išeiti iš "benefitform" aplanko į "app", tada į "images"
+import mapImage from '../images/mapas.png'
 
-    return (
-      <>
-      <main className="min-h-screen bg-slate-50 relative">
+export default function BenefitFormPage({ searchParams }: { searchParams?: { city?: string, state?: string, county?: string } }) {
+  const headersList = headers()
+
+  // DATA EXTRACTION
+  const city = searchParams?.city || headersList.get('x-user-city') || 'Your Area'
+  const region = searchParams?.state || headersList.get('x-user-region') || 'US'
+  
+  // REF ID & URGENCY
+  const caseRef = `NRN-${new Date().getFullYear()}-${Math.floor(Math.random() * 8999) + 1000}`
+  const spotsLeft = Math.floor(Math.random() * 4) + 2
+  const today = new Date();
+  const deadline = new Date(today);
+  deadline.setDate(today.getDate() + 2);
+  const formattedDeadline = deadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+  return (
+    <>
+      <main className="min-h-screen bg-[#0B1120] text-slate-300 font-sans selection:bg-emerald-500/30 relative overflow-x-hidden pt-16">
         
-        {/* Exit Intent Popup */}
         <ExitIntent />
 
-        {/* ═══════════════════════════════════════════════════════════════
-            DISCLAIMER - Compact but compliant
-        ═══════════════════════════════════════════════════════════════ */}
-        
-
-
-        {/* ═══════════════════════════════════════════════════════════════
-            HERO + FORM - PREMIUM CONVERSION BLOCK
-        ═══════════════════════════════════════════════════════════════ */}
-        <section id="eligibility-form" className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 scroll-mt-0 overflow-hidden">
-          
-          {/* Background Effects */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl"></div>
+        {/* SYSTEM NOTICE BANNER */}
+        <div className="bg-[#1e293b]/90 border-b border-slate-700 py-2 relative z-50 backdrop-blur-sm">
+          <div className="container mx-auto px-4 text-center flex items-center justify-center gap-2">
+            <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
+            <p className="text-[10px] sm:text-xs font-mono font-medium text-slate-300 uppercase tracking-widest">
+              DATABASE STATUS: {region} REGION UPDATED {new Date().toLocaleDateString()}
+            </p>
           </div>
-          
-          <div className="relative container mx-auto px-4 py-6 sm:py-14 md:py-20 max-w-6xl z-10">
-            
-            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              
-              {/* LEFT: Value Proposition */}
-              <div className="text-white text-center lg:text-left">
-                
-                {/* Location Badge - Premium */}
-                <div className="inline-flex items-center gap-1.5 sm:gap-2.5 bg-gradient-to-r from-emerald-500/20 to-emerald-500/5 backdrop-blur-md border border-emerald-500/30 rounded-full px-3 sm:px-5 py-1.5 sm:py-2 mb-6 sm:mb-8 shadow-lg shadow-emerald-500/10">
-                  <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5 flex-shrink-0">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-emerald-400 shadow-lg shadow-emerald-400/50"></span>
-                  </span>
-                  <span className="text-[11px] sm:text-sm font-semibold text-emerald-300 tracking-wide whitespace-nowrap">
-                    ✓ Program Active in <span className="hidden sm:inline">{city}, {region}</span><span className="sm:hidden">{city}</span>
-                  </span>
-                </div>
+        </div>
 
-                {/* Main Headline - Dramatic */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.05] mb-6">
-                  <span className="bg-gradient-to-r from-white via-white to-slate-300 bg-clip-text text-transparent">
-                    UNCLAIMED ROOF ALLOWANCE?
-                  </span>
-                  <br />
-                  <span className="bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-400 bg-clip-text text-transparent">
-                    Guaranteed.
+        {/* HERO SECTION */}
+        <section className="relative pt-8 pb-12 lg:pt-24 lg:pb-32 overflow-hidden bg-[#0B1120]">
+          
+          {/* ================================================================================== */}
+          {/* BACKGROUND LAYERS (Sluoksniai) */}
+          {/* ================================================================================== */}
+          
+          {/* 1. Base Grid */}
+          <div className="absolute inset-0 opacity-[0.05] z-0" style={{ backgroundImage: `radial-gradient(#475569 1px, transparent 1px)`, backgroundSize: '32px 32px' }}></div>
+          
+          {/* 2. JŪSŲ MAP NUOTRAUKA (Su importu) */}
+          <div className="absolute inset-0 z-0">
+             <img 
+                src={mapImage.src} 
+                alt="Local Map Data" 
+                className="w-full h-full object-cover opacity-[0.15] grayscale mix-blend-luminosity"
+             />
+             {/* Gradientas iš apačios (kad tekstas būtų įskaitomas) */}
+             <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/60 to-transparent"></div>
+             {/* Gradientas iš šonų (kad centras būtų ryškiausias) */}
+             <div className="absolute inset-0 bg-gradient-to-r from-[#0B1120]/80 via-transparent to-[#0B1120]/80"></div>
+          </div>
+
+          {/* 3. Mėlynas švytėjimas (Glow) */}
+          <div className="hidden sm:block absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0 mix-blend-screen"></div>
+
+          {/* ================================================================================== */}
+
+          <div className="relative container mx-auto px-4 max-w-7xl z-10">
+            <div className="grid lg:grid-cols-12 gap-8 lg:gap-20 items-start">
+              
+              {/* LEFT: THE AUTHORITY */}
+              <div className="lg:col-span-7 pt-4">
+                
+                {/* HEADLINE */}
+                <h1 className="text-3xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-white tracking-tight leading-[1.1] mb-5 drop-shadow-2xl">
+                  Verify Available Funding For <br className="hidden sm:block"/>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-200 to-emerald-400">
+                    Full Roof Replacement
                   </span>
                 </h1>
                 
-                {/* Subheadline */}
-                <p className="text-xl sm:text-2xl font-medium text-slate-200 mb-3 max-w-lg mx-auto lg:mx-0">
-                  Uncover the <span className="text-emerald-400 font-bold">$21,450+</span> Insurance Payout Hiding in Your Roof
+                <p className="text-base sm:text-xl text-slate-400 leading-relaxed mb-8 max-w-2xl drop-shadow-lg">
+                  Homeowners in <span className="text-white font-semibold border-b border-emerald-500/50">{city}</span> are currently eligible to check for <strong>unclaimed policy allowances</strong>. 
+                  <span className="block mt-2 text-sm text-slate-500">Don't pay out-of-pocket expenses before verifying your status.</span>
                 </p>
 
-                {/* Urgency Line */}
-                <div className="inline-flex items-center gap-2 text-amber-400 mb-8">
-                  <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
-                  </svg>
-                  <span className="text-sm font-bold uppercase tracking-wider">Claim Deadline Expires Q4 2025</span>
-                </div>
-
-                {/* Stats Row - Premium Cards */}
-                <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8">
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 text-center hover:bg-white/10 transition-all hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5">
-                    <p className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">$17.4k</p>
-                    <p className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider mt-1">Avg. Payout</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 backdrop-blur-sm border border-emerald-500/30 rounded-2xl p-4 text-center shadow-lg shadow-emerald-500/10">
-                    <p className="text-2xl sm:text-3xl font-black text-emerald-400">$0</p>
-                    <p className="text-[10px] sm:text-xs text-emerald-300/70 uppercase tracking-wider mt-1">Your Cost</p>
-                  </div>
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 text-center hover:bg-white/10 transition-all hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5">
-                    <p className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">3 min</p>
-                    <p className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider mt-1">Response</p>
-                  </div>
-                </div>
-
-                {/* Trust Line - Premium Chips */}
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3">
-                  <span className="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 text-xs text-slate-300">
-                    <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                    Licensed & Certified
-                  </span>
-                  <span className="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 text-xs text-slate-300">
-                    <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                    All Insurance Accepted
-                  </span>
-                  <span className="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 text-xs text-slate-300">
-                    <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                    No Obligation
-                  </span>
-                </div>
-              </div>
-
-              {/* RIGHT: Form Card - Premium Glass */}
-              <div className="relative">
-                {/* Glow Effect Behind Card */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-emerald-500/20 rounded-3xl blur-xl opacity-70"></div>
-                
-                <div className="relative bg-white rounded-3xl shadow-2xl shadow-black/20 overflow-hidden border border-white/20">
-                  
-                  {/* Form Header */}
-                  <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-white/80 text-xs font-medium uppercase tracking-wider">Claim File ID:</p>
-                        <p className="text-white font-bold text-lg">#{claimFileId}</p>
-                      </div>
-                      <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1.5">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                        </span>
-                        <span className="text-white text-xs font-bold">{spotsLeft} spots left</span>
-                      </div>
+                {/* Data Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-slate-800/40 border border-slate-800/60 rounded-lg overflow-hidden mb-8 shadow-xl backdrop-blur-md">
+                    <div className="bg-[#0f1623]/60 p-4 text-center sm:text-left">
+                        <div className="text-xl sm:text-2xl font-mono font-bold text-white mb-1">$17.450+</div>
+                        <div className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Potential Allowance</div>
                     </div>
-                  </div>
-                  
-                  {/* Form Body */}
-                  <div className="p-6 sm:p-8">
-                    <BenefitForm defaultCity={city} defaultState={region} spotsLeft={spotsLeft} />
-                  </div>
-
-                  {/* Trust Footer - Premium */}
-                  <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-t border-slate-200 px-6 py-4">
-                    <div className="flex items-center justify-center gap-5 text-xs text-slate-500">
-                      <span className="flex items-center gap-1.5 font-medium">
-                        <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
-                        </svg>
-                        256-bit SSL
-                      </span>
-                      <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                      <span className="font-medium">100% Free</span>
-                      <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                      <span className="font-medium">No Obligation</span>
+                    <div className="bg-[#0f1623]/60 p-4 text-center sm:text-left">
+                        <div className="text-xl sm:text-2xl font-mono font-bold text-emerald-400 mb-1">Up to 99%</div>
+                        <div className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">PROJECTED COVERAGE</div>
                     </div>
-                  </div>
+                    <div className="bg-[#0f1623]/60 p-4 hidden md:block">
+                        <div className="text-2xl font-mono font-bold text-white mb-1">100%</div>
+                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Secure Online</div>
+                    </div>
+                </div>
+              </div>
+
+              {/* RIGHT: FORM */}
+              <div id="eligibility-form" className="lg:col-span-5 relative scroll-mt-24">
+                <div className="relative bg-[#111827] border border-slate-700 rounded-xl shadow-2xl overflow-hidden ring-1 ring-white/5">
+                    
+                    {/* Header: Portal Look */}
+                    <div className="bg-[#1f2937] border-b border-slate-700 p-4 flex justify-between items-center">
+                        <div>
+                             <p className="text-[9px] text-slate-400 uppercase tracking-wider font-bold mb-0.5">Reference File ID</p>
+                             <div className="flex items-center gap-2">
+                                <span className="font-mono text-white font-bold tracking-wide bg-black/30 px-2 py-0.5 rounded border border-white/5">{caseRef}</span>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-1.5 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span className="text-[9px] font-bold text-emerald-400 uppercase">System Ready</span>
+                        </div>
+                    </div>
+
+                    {/* FORM COMPONENT */}
+                    <div className="p-5 sm:p-6 bg-[#111827]">
+                        <BenefitForm defaultCity={city} defaultState={region} spotsLeft={spotsLeft} caseRef={caseRef} />
+                    </div>
+
+                    {/* Form Footer */}
+                    <div className="bg-[#0f172a] border-t border-slate-800 p-3 text-center">
+                        <p className="text-[10px] text-slate-500 flex justify-center items-center gap-1.5">
+                           <Lock className="w-3 h-3 opacity-60" /> 
+                           Information encrypted for verification only.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Deadline Tag */}
+                <div className="absolute -top-3 -right-2 sm:-right-4 bg-amber-500 text-[#0f172a] text-[10px] font-bold px-3 py-1 rounded shadow-lg transform rotate-2 border border-amber-400/50 uppercase tracking-wider">
+                    Funding Review Deadline: {formattedDeadline}
                 </div>
               </div>
 
             </div>
           </div>
         </section>
+        
+        <LiveTicker />
 
         {/* ═══════════════════════════════════════════════════════════════
-            HOW IT WORKS - PREMIUM 3-STEP PROCESS
+            PROCESS SECTION
         ═══════════════════════════════════════════════════════════════ */}
-        <section className="py-16 sm:py-20 bg-gradient-to-b from-white to-slate-50">
-          <div className="container mx-auto px-4 max-w-5xl">
-            
-            {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16">
-              <span className="inline-block text-emerald-600 text-sm font-bold uppercase tracking-wider mb-3">Simple Process</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4">
-                3 Steps to Your <span className="text-emerald-600">Free Roof</span>
-              </h2>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Most homeowners qualify for full coverage. Here's how it works:
-              </p>
-            </div>
-
-            {/* Steps */}
-            <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
-              
-              {/* Step 1 */}
-              <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                <div className="relative bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all">
-                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white text-2xl font-black mb-5 shadow-lg shadow-emerald-500/30">
-                    1
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Free Inspection</h3>
-                  <p className="text-slate-600 leading-relaxed">
-                    Licensed inspector examines your roof for storm damage. Takes 15-20 minutes. <span className="font-semibold text-emerald-600">$350 value - FREE.</span>
-                  </p>
+        <section className="py-16 bg-[#0f172a] border-t border-slate-800 relative">
+            <div className="container mx-auto px-4 max-w-5xl relative z-10">
+                <div className="text-center mb-12">
+                    <span className="text-emerald-600 font-bold uppercase tracking-wider text-xs mb-2 block">Standard Operating Procedure</span>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">How The Allowance Process Works</h2>
+                    <p className="text-slate-400 max-w-2xl mx-auto text-sm">
+                        This is not a discount or a coupon. We help you trigger the coverage provisions you are already paying for in your homeowner's policy.
+                    </p>
                 </div>
-              </div>
 
-              {/* Step 2 */}
-              <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                <div className="relative bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-2xl font-black mb-5 shadow-lg shadow-blue-500/30">
-                    2
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">We File Your Claim</h3>
-                  <p className="text-slate-600 leading-relaxed">
-                    Our experts handle all paperwork with your insurance. We fight for <span className="font-semibold text-blue-600">maximum payout.</span>
-                  </p>
+                <div className="grid md:grid-cols-3 gap-8">
+                    {[
+                      { step: "01", title: "Map Verification", desc: "Complete the secure form. The system cross-references your location with hail impact data." },
+                      { step: "02", title: "Licensed Assessment", desc: "A certified inspector documents the damage. This report is required to compel the insurance carrier." },
+                      { step: "03", title: "Coverage Release", desc: "Once approved, the insurance carrier authorizes the funds for full restoration." }
+                    ].map((item) => (
+                      <div key={item.step} className="relative group bg-[#1e293b]/50 border border-slate-700 p-6 rounded-xl hover:border-emerald-500/30 transition-all hover:bg-[#1e293b]">
+                          <div className="absolute top-4 right-4 text-slate-700 font-mono text-4xl font-bold opacity-20 group-hover:opacity-40 transition-opacity select-none">{item.step}</div>
+                          <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4 border border-emerald-500/20 group-hover:scale-110 transition-transform">
+                             <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                          </div>
+                          <h3 className="font-bold text-white mb-2">{item.title}</h3>
+                          <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                      </div>
+                    ))}
                 </div>
-              </div>
-
-              {/* Step 3 */}
-              <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                <div className="relative bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all">
-                  <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center text-white text-2xl font-black mb-5 shadow-lg shadow-amber-500/30">
-                    3
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">New Roof Installed</h3>
-                  <p className="text-slate-600 leading-relaxed">
-                    Premium materials, certified installers, lifetime warranty. <span className="font-semibold text-amber-600">$0 out of pocket.</span>
-                  </p>
-                </div>
-              </div>
             </div>
-
-            {/* Bottom CTA */}
-            <div className="mt-12 text-center">
-              <a href="#eligibility-form" className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5">
-                Check If You Qualify
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </a>
-            </div>
-          </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SOCIAL PROOF - TRUST SIGNALS
-        ═══════════════════════════════════════════════════════════════ */}
-        <section className="py-12 sm:py-16 bg-slate-900 relative overflow-hidden">
-          {/* Background glow */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-          </div>
-          
-          <div className="relative container mx-auto px-4 max-w-5xl">
-            
-            {/* Stats Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12">
-              <div className="text-center p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
-                <p className="text-3xl sm:text-4xl font-black text-white mb-1">$16.4k</p>
-                <p className="text-sm text-slate-400">Avg. Claim Value</p>
-              </div>
-              <div className="text-center p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
-                <p className="text-3xl sm:text-4xl font-black text-emerald-400 mb-1">2,400+</p>
-                <p className="text-sm text-slate-400">Roofs Replaced</p>
-              </div>
-              <div className="text-center p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
-                <p className="text-3xl sm:text-4xl font-black text-white mb-1">98%</p>
-                <p className="text-sm text-slate-400">Approval Rate</p>
-              </div>
-              <div className="text-center p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
-                <p className="text-3xl sm:text-4xl font-black text-amber-400 mb-1">A+</p>
-                <p className="text-sm text-slate-400">BBB Rating</p>
-              </div>
-            </div>
-
-            {/* Trust Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-white">Licensed & Insured</p>
-                  <p className="text-xs text-slate-400">All 50 States</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center text-white font-black">
-                  A+
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-white">BBB Accredited</p>
-                  <p className="text-xs text-slate-400">Top Rated</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3">
-                <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-white">All Insurers</p>
-                  <p className="text-xs text-slate-400">State Farm, Allstate+</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Live Counter */}
-            <div className="mt-10 text-center">
-              <div className="inline-flex items-center gap-2.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-6 py-3">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
-                </span>
-                <span className="text-sm font-bold text-emerald-300">
-                  24 claims approved in {city} this week
-                </span>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════════════
-            ARTICLES / RESOURCES - SEO
-        ═══════════════════════════════════════════════════════════════ */}
-        {locationName && (
-          <section className="py-14 sm:py-20 bg-gradient-to-b from-slate-50 to-white">
+        {/* FOOTER */}
+        <footer className="bg-[#0B1120] border-t border-slate-800 pt-12 pb-24 sm:pb-8">
             <div className="container mx-auto px-4 max-w-5xl">
-              
-              {/* Header */}
-              <div className="text-center mb-10 sm:mb-14">
-                <span className="inline-block text-emerald-600 text-sm font-bold uppercase tracking-wider mb-3">Resources</span>
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4">
-                  {locationName} Roofing Guides
-                </h2>
-                <p className="text-lg text-slate-600 max-w-xl mx-auto">
-                  Expert advice for maximizing your insurance benefits
-                </p>
-              </div>
-              
-              {/* Articles Grid */}
-              <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <Link href={`/articles/free-roof-inspection-guide${county ? `?county=${county}` : `?city=${cityParam}`}&state=${stateParam}`} className="group relative bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all hover:-translate-y-1">
-                  <div className="text-4xl mb-3">🏠</div>
-                  <h3 className="font-bold text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors">Free Inspection</h3>
-                  <p className="text-sm text-slate-500 mb-3">Get your $350 inspection free</p>
-                  <span className="text-sm font-semibold text-emerald-600 flex items-center gap-1">
-                    Read Guide 
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                </Link>
+                <div className="grid md:grid-cols-2 gap-8 mb-10 text-xs text-slate-500">
+                    <div>
+                        <h4 className="text-white font-bold mb-3 uppercase tracking-wider">Legal Disclaimer</h4>
+                        <p className="leading-relaxed opacity-70">
+                            This portal is a referral service connecting homeowners with licensed independent adjusters and restoration contractors. "Allowance" refers to potential insurance policy benefits. Not a government agency.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 className="text-white font-bold mb-3 uppercase tracking-wider">Privacy & Data Security</h4>
+                        <p className="leading-relaxed opacity-70">
+                            Your data is encrypted via 256-bit SSL. Information is only shared with verified partners in the {region} area for the purpose of damage assessment.
+                        </p>
+                    </div>
+                </div>
                 
-                <Link href={`/articles/hail-damage-roof-replacement${county ? `?county=${county}` : `?city=${cityParam}`}&state=${stateParam}`} className="group relative bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-purple-300 transition-all hover:-translate-y-1">
-                  <div className="text-4xl mb-3">🌨️</div>
-                  <h3 className="font-bold text-slate-900 mb-1 group-hover:text-purple-600 transition-colors">Hail Damage</h3>
-                  <p className="text-sm text-slate-500 mb-3">Insurance claim guide</p>
-                  <span className="text-sm font-semibold text-purple-600 flex items-center gap-1">
-                    Read Guide 
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                </Link>
-                
-                <Link href={`/articles/roofing-benefits-guide-2025${county ? `?county=${county}` : `?city=${cityParam}`}&state=${stateParam}`} className="group relative bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all hover:-translate-y-1">
-                  <div className="text-4xl mb-3">💰</div>
-                  <h3 className="font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Benefits Guide</h3>
-                  <p className="text-sm text-slate-500 mb-3">Maximize your payout</p>
-                  <span className="text-sm font-semibold text-blue-600 flex items-center gap-1">
-                    Read Guide 
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                </Link>
-                
-                <Link href={`/articles/storm-damage-claims${county ? `?county=${county}` : `?city=${cityParam}`}&state=${stateParam}`} className="group relative bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-red-300 transition-all hover:-translate-y-1">
-                  <div className="text-4xl mb-3">⛈️</div>
-                  <h3 className="font-bold text-slate-900 mb-1 group-hover:text-red-600 transition-colors">Storm Claims</h3>
-                  <p className="text-sm text-slate-500 mb-3">File successful claims</p>
-                  <span className="text-sm font-semibold text-red-600 flex items-center gap-1">
-                    Read Guide 
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                </Link>
-                
-                <Link href={`/articles/home-restoration-tips${county ? `?county=${county}` : `?city=${cityParam}`}&state=${stateParam}`} className="group relative bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all hover:-translate-y-1">
-                  <div className="text-4xl mb-3">🔨</div>
-                  <h3 className="font-bold text-slate-900 mb-1 group-hover:text-amber-600 transition-colors">Restoration</h3>
-                  <p className="text-sm text-slate-500 mb-3">Expert tips & tricks</p>
-                  <span className="text-sm font-semibold text-amber-600 flex items-center gap-1">
-                    Read Guide 
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                </Link>
-              </div>
+                <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-slate-600">
+                    <p>© {new Date().getFullYear()} National Restoration Network. System Version 4.0.2</p>
+                    <div className="flex gap-6">
+                        <Link href="/privacy" className="hover:text-emerald-400 transition-colors">Privacy Policy</Link>
+                        <Link href="/terms" className="hover:text-emerald-400 transition-colors">Terms of Use</Link>
+                    </div>
+                </div>
             </div>
-          </section>
-        )}
-
-        {/* ═══════════════════════════════════════════════════════════════
-            FOOTER / DISCLAIMER
-        ═══════════════════════════════════════════════════════════════ */}
-        <footer className="py-8 bg-slate-900 border-t border-slate-800">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <p className="text-xs text-slate-500 text-center leading-relaxed">
-              * Average based on approved insurance claims processed through our contractor network. Results vary based on damage extent, policy coverage, and insurance carrier decisions.
-              We connect you with licensed contractors who can help assess your roof and navigate the claims process. This is not a guarantee of coverage or payment.
-            </p>
-            <div className="flex items-center justify-center gap-6 mt-6 text-xs text-slate-600">
-              <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-              <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
-              <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-              <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
-              <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
-            </div>
-            <p className="text-center text-xs text-slate-600 mt-6">
-              © {new Date().getFullYear()} Home Roof Program. All rights reserved.
-            </p>
-          </div>
         </footer>
 
       </main>
-
-      {/* Smart Mobile CTA - shows only when form is not visible */}
+      
       <MobileCTA spotsLeft={spotsLeft} />
-      </>
-    )
-  }
+    </>
+  )
+}

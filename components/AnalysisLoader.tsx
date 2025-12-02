@@ -1,10 +1,10 @@
-// components/AnalysisLoader.tsx  ← PATOBULINTA VERSIJA (MAX CONVERSION)
+// components/AnalysisLoader.tsx - AUTHORITY GRADE (Server Terminal Style)
 
 "use client"
 
-import { useState, useEffect, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, Loader2, Shield, Users, Zap } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { CheckCircle2, Loader2, ShieldCheck, Server, Database, Lock } from 'lucide-react'
 
 interface AnalysisLoaderProps {
   onComplete: () => void
@@ -13,183 +13,164 @@ interface AnalysisLoaderProps {
 }
 
 const steps = [
-  "Verifying address in federal database...",
-  "Analyzing storm damage records (2023–2025)...",
-  "Checking property eligibility criteria...",
-  "Calculating maximum benefit amount..."
+  { id: 1, text: "Authenticating secure session...", icon: Lock },
+  { id: 2, text: "Querying National Weather Service (NOAA) database...", icon: Database },
+  { id: 3, text: "Cross-referencing regional policy allowances...", icon: Server },
+  { id: 4, text: "Generating eligibility report...", icon: ShieldCheck }
 ]
-
-// Fake FOMO vardai
-const fakeNames = ["Michael", "Sarah", "David", "Jennifer", "Robert", "Lisa", "James", "Maria", "John", "Emily"]
-const fakeCities = ["Houston", "Dallas", "Austin", "Phoenix", "Denver", "Atlanta", "Miami", "Orlando", "Tampa", "Charlotte"]
 
 export default function AnalysisLoader({ onComplete, city, state }: AnalysisLoaderProps) {
   const [currentStep, setCurrentStep] = useState(0)
-  const [fomoMessage, setFomoMessage] = useState<string | null>(null)
+  const [logs, setLogs] = useState<string[]>([])
 
-  // Personalizuotas pavadinimas
-  const locationText = useMemo(() => {
-    if (city && state) return `${city}, ${state}`
-    if (state) return state
-    return "Your Area"
-  }, [city, state])
+  // SYSTEM LOGS - Tai sukuria "realaus darbo" iliuziją
+  useEffect(() => {
+    const randomLogs = [
+      `> TLS 1.3 Handshake established...`,
+      `> GET /api/geo-data/${city?.toLowerCase() || 'local'} [200 OK]`,
+      `> Analyzing hail patterns (2023-2025)...`,
+      `> Wind velocity data: MATCH FOUND`,
+      `> Carrier coverage maps: UPDATED`,
+      `> Calculating deductibles...`,
+      `> Optimization engine: ACTIVE`,
+      `> Finalizing estimate range...`
+    ]
 
-  // Žingsniai – 900ms (greičiau!)
+    let logIndex = 0
+    const logInterval = setInterval(() => {
+      if (logIndex < randomLogs.length) {
+        setLogs(prev => [...prev.slice(-4), randomLogs[logIndex]]) // Rodyti tik paskutines 5 eilutes
+        logIndex++
+      }
+    }, 450)
+
+    return () => clearInterval(logInterval)
+  }, [city])
+
+  // PROGRESS LOGIC - Tikslus laikas (3.5s total)
   useEffect(() => {
     if (currentStep < steps.length) {
-      const timer = setTimeout(() => setCurrentStep(prev => prev + 1), 900)
+      const stepTime = currentStep === 1 ? 1200 : 800 // NOAA žingsnis ilgiausias (atrodo sunkiausias)
+      const timer = setTimeout(() => setCurrentStep(prev => prev + 1), stepTime)
       return () => clearTimeout(timer)
     } else {
-      setTimeout(onComplete, 800)
+      setTimeout(onComplete, 600)
     }
   }, [currentStep, onComplete])
 
-  // FOMO popup kas 2 sekundes
-  useEffect(() => {
-    const showFomo = () => {
-      const name = fakeNames[Math.floor(Math.random() * fakeNames.length)]
-      const fomoCity = city || fakeCities[Math.floor(Math.random() * fakeCities.length)]
-      setFomoMessage(`${name} from ${fomoCity} just qualified!`)
-      setTimeout(() => setFomoMessage(null), 2500)
-    }
-
-    const timer = setTimeout(showFomo, 1500)
-    return () => clearTimeout(timer)
-  }, [city])
-
-  const progress = (currentStep / steps.length) * 100
+  const progress = Math.min(((currentStep + 1) / steps.length) * 100, 100)
 
   return (
-    <div className="w-full max-w-2xl mx-auto py-4 md:py-8">
+    <div className="w-full max-w-xl mx-auto py-6">
       
-      {/* FOMO Popup – viršuje */}
-      <AnimatePresence>
-        {fomoMessage && (
-          <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-green-600 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 text-xs md:text-base font-bold"
-          >
-            <Zap className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            {fomoMessage}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Header su personalizacija */}
-      <div className="mb-4 md:mb-8 text-center">
-        <div className="flex items-center justify-center gap-1.5 md:gap-2 mb-2 md:mb-3">
-          <Shield className="w-5 h-5 md:w-8 md:h-8 text-blue-700" />
-          <span className="text-xs md:text-sm font-bold text-blue-700 uppercase tracking-wide">
-            Secure Analysis
-          </span>
+      {/* HEADER - Technical & Secure */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded text-[10px] font-mono text-emerald-400 mb-3 animate-pulse">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            SYSTEM PROCESSING
         </div>
-        <h2 className="text-xl md:text-3xl font-black text-blue-900 mb-1 md:mb-2">
-          Analyzing Your Eligibility
+        <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">
+          Verifying Eligibility
         </h2>
-        <p className="text-sm md:text-lg text-slate-600 font-semibold">
-          📍 {locationText}
+        <p className="text-sm text-slate-500 font-mono">
+          Ref ID: <span className="text-slate-300">REQ-{Math.floor(Math.random()*9000)+1000}</span> • {city ? `${city}, ${state}` : 'Your Area'}
         </p>
       </div>
 
-      {/* Progress Bar */}
-      <div className="mb-4 md:mb-8">
-        <div className="relative h-7 md:h-10 bg-gray-200 rounded-full overflow-hidden border-3 md:border-4 border-gray-300 shadow-inner">
+      {/* PROGRESS BAR - Slim & Precise */}
+      <div className="mb-8 relative">
+        <div className="flex justify-between text-[10px] font-mono text-emerald-400 mb-1 px-1">
+            <span>START</span>
+            <span>{Math.round(progress)}%</span>
+        </div>
+        <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700"
-            initial={{ width: 0 }}
+            className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+            initial={{ width: "0%" }}
             animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.5 }}
           />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-lg md:text-2xl font-black text-white drop-shadow-md">
-              {Math.round(progress)}%
-            </span>
-          </div>
         </div>
       </div>
 
-      {/* Žingsniai */}
-      <div className="space-y-2.5 md:space-y-4">
-        {steps.map((text, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: -30 }}
-            animate={{
-              opacity: 1,
-              x: 0,
-              transition: { delay: index * 0.15, duration: 0.3 }
-            }}
-            className={`flex items-start gap-2 md:gap-3 p-2.5 md:p-4 rounded-lg md:rounded-xl border-2 transition-all duration-300 ${
-              index < currentStep 
-                ? 'bg-green-50 border-green-300' 
-                : index === currentStep 
-                  ? 'bg-blue-50 border-blue-400 shadow-md' 
-                  : 'bg-gray-50 border-gray-200'
-            }`}
-          >
-            {/* Ikona */}
-            <div className="flex-shrink-0 mt-0.5">
-              {index < currentStep ? (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                >
-                  <CheckCircle2 className="w-5 h-5 md:w-8 md:h-8 text-green-600" />
-                </motion.div>
-              ) : index === currentStep ? (
-                <Loader2 className="w-5 h-5 md:w-8 md:h-8 text-blue-600 animate-spin" />
-              ) : (
-                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full border-2 md:border-3 border-gray-300 bg-gray-100" />
-              )}
-            </div>
+      {/* MAIN STEPS - Visualizing the "Work" */}
+      <div className="space-y-3 mb-8">
+        {steps.map((step, index) => {
+          const isActive = index === currentStep
+          const isCompleted = index < currentStep
+          const Icon = step.icon
 
-            {/* Tekstas */}
-            <div className="flex-1 min-w-0">
-              <p className={`text-xs md:text-base font-bold leading-tight md:leading-normal transition-colors duration-300 ${
-                index < currentStep ? 'text-green-700' : 
-                index === currentStep ? 'text-blue-800' : 
-                'text-gray-400'
+          return (
+            <motion.div
+              key={step.id}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className={`flex items-center gap-4 p-3 rounded-lg border transition-all duration-300 ${
+                isActive 
+                  ? 'bg-emerald-900/10 border-emerald-500/30 shadow-lg shadow-emerald-900/20' 
+                  : isCompleted
+                  ? 'bg-slate-800/30 border-slate-700/50 opacity-60'
+                  : 'bg-transparent border-transparent opacity-30'
+              }`}
+            >
+              <div className={`w-8 h-8 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
+                isActive ? 'bg-emerald-500/20 text-emerald-400' : 
+                isCompleted ? 'bg-emerald-500/10 text-emerald-500' : 
+                'bg-slate-800 text-slate-600'
               }`}>
-                {text}
-              </p>
-              {index < currentStep && (
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-[10px] md:text-sm text-green-600 font-semibold"
+                {isCompleted ? (
+                   <CheckCircle2 className="w-5 h-5" />
+                ) : isActive ? (
+                   <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                   <Icon className="w-4 h-4" />
+                )}
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                <p className={`text-sm font-medium ${isActive ? 'text-white' : 'text-slate-400'}`}>
+                  {step.text}
+                </p>
+                {isActive && (
+                    <p className="text-[10px] text-emerald-500/70 mt-0.5 font-mono animate-pulse">
+                        Processing...
+                    </p>
+                )}
+              </div>
+            </motion.div>
+          )
+        })}
+      </div>
+
+      {/* THE "TERMINAL" - The Authority Trigger */}
+      {/* Tai rodo "kodą", todėl vartotojas tiki, kad sistema tikra */}
+      <div className="bg-[#0B1120] rounded-lg border border-slate-800 p-4 font-mono text-[10px] sm:text-xs leading-relaxed overflow-hidden">
+        <div className="flex items-center gap-1.5 mb-2 border-b border-slate-800 pb-2">
+            <div className="w-2 h-2 rounded-full bg-red-500/50"></div>
+            <div className="w-2 h-2 rounded-full bg-yellow-500/50"></div>
+            <div className="w-2 h-2 rounded-full bg-green-500/50"></div>
+            <span className="ml-2 text-slate-500">System Activity Log</span>
+        </div>
+        <div className="space-y-1 h-24 flex flex-col justify-end">
+            {logs.map((log, i) => (
+                <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, x: -5 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="text-slate-400 truncate"
                 >
-                  ✓ Complete
-                </motion.span>
-              )}
-            </div>
-          </motion.div>
-        ))}
+                    <span className="text-emerald-500 mr-2">$</span>
+                    {log}
+                </motion.div>
+            ))}
+             <motion.div 
+                animate={{ opacity: [0, 1, 0] }} 
+                transition={{ repeat: Infinity, duration: 0.8 }}
+                className="w-2 h-4 bg-emerald-500 inline-block align-middle ml-1"
+             />
+        </div>
       </div>
 
-      {/* Pabaigos žinutė */}
-      <AnimatePresence>
-        {currentStep === steps.length && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mt-4 md:mt-8"
-          >
-            <div className="inline-flex items-center gap-1.5 md:gap-2 bg-green-100 text-green-800 px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold text-xs md:text-base">
-              <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5" />
-              Analysis Complete – Loading Results...
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Trust indicator apačioje */}
-      <div className="mt-4 md:mt-8 flex items-center justify-center gap-1.5 md:gap-2 text-[10px] md:text-sm text-slate-500">
-        <Users className="w-3.5 h-3.5 md:w-4 md:h-4" />
-        <span><strong>2,847</strong> homeowners checked today</span>
-      </div>
     </div>
   )
 }

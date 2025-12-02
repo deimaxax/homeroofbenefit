@@ -15,6 +15,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'], // Užtikrinam gerą mono fontą terminalui
       },
       keyframes: {
         "fade-in-up": {
@@ -25,10 +26,32 @@ const config: Config = {
           "0%, 100%": { opacity: "0.5" },
           "50%": { opacity: "0.7" },
         },
+        // NAUJAS: LiveTicker judėjimas
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        // NAUJAS: Formos klaidos efektas (Error Shake)
+        shake: {
+          '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+          '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+          '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+          '40%, 60%': { transform: 'translate3d(4px, 0, 0)' },
+        },
+        // NAUJAS: "Skenavimo" efektas (Loading/Scanning)
+        shimmer: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        }
       },
       animation: {
         "fade-in-up": "fade-in-up 0.5s ease-out",
         "pulse-slow": "pulse-slow 3s ease-in-out infinite",
+        // Lėtas, solidus judėjimas (45s)
+        marquee: 'marquee 40s linear infinite',
+        // Greitas sudrebėjimas klaidoms
+        shake: 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+        shimmer: 'shimmer 2s linear infinite',
       },
       colors: {
         border: "hsl(var(--border))",

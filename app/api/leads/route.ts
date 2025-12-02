@@ -8,6 +8,7 @@ interface LeadRequestData {
   phone: string
   email: string
   zipCode?: string
+  streetAddress?: string
   city?: string
   state?: string
   source?: string
@@ -170,10 +171,10 @@ export async function POST(request: NextRequest) {
     const leadData: Lead = {
       name: body.name,
       phone: body.phone,
-      // Some deployments still have email marked NOT NULL in the DB.
-      // Coerce missing emails to empty string to avoid insert errors.
-      email: (body.email || '').toString(),
+      // Email is NOT NULL in current schema - use placeholder if not provided
+      email: body.email || 'noemail@placeholder.com',
       zip_code: body.zipCode || null,
+      street_address: body.streetAddress || null,
       city: body.city || request.headers.get('x-user-city') || null,
       state: body.state || request.headers.get('x-user-region') || null,
       source: body.source || 'benefit-form',
@@ -190,6 +191,7 @@ export async function POST(request: NextRequest) {
         propertyIssues: body.propertyIssues || [],
         estimatedBenefit: body.estimatedBenefit || null,
       }),
+      property_issues: body.propertyIssues && body.propertyIssues.length > 0 ? body.propertyIssues : null,
     }
 
     console.log('📩 New lead received:', {
@@ -210,18 +212,25 @@ export async function POST(request: NextRequest) {
     try {
       const supabase = createServerSupabaseClient()
       
-      const { data, error } = await supabase
-        .from('leads')
-        .insert([leadData])
-        .select('id')
-        .single()
-
-      if (error) {
-        console.error('❌ Supabase insert error:', error.message)
+      if (!supabase) {
+        console.log('⚠️ Supabase not configured - lead would be saved:', leadData)
+        // Generate mock lead ID for dev/testing
+        leadId = `dev_${Date.now()}`
+        supabaseSuccess = false
       } else {
-        supabaseSuccess = true
-        leadId = data?.id
-        console.log('✅ Lead saved to Supabase:', leadId)
+        const { data, error } = await supabase
+          .from('leads')
+          .insert([leadData])
+          .select('id')
+          .single()
+
+        if (error) {
+          console.error('❌ Supabase insert error:', error.message)
+        } else {
+          supabaseSuccess = true
+          leadId = data?.id
+          console.log('✅ Lead saved to Supabase:', leadId)
+        }
       }
     } catch (supabaseError) {
       console.error('❌ Supabase connection error:', supabaseError)
@@ -256,6 +265,15 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    // If Supabase not configured but we have a mock ID (dev mode), return success
+    if (leadId && leadId.startsWith('dev_')) {
+      return NextResponse.json({
+        success: true,
+        message: 'Lead captured (dev mode - Supabase not configured)',
+        leadId: leadId,
+      })
+    }
+
     // If Supabase failed but webhook exists, still return success
     if (WEBHOOK_URL) {
       return NextResponse.json({
@@ -286,8 +304,12 @@ export async function GET() {
   
   try {
     const supabase = createServerSupabaseClient()
-    const { error } = await supabase.from('leads').select('id').limit(1)
-    supabaseStatus = error ? `error: ${error.message}` : 'connected'
+    if (!supabase) {
+      supabaseStatus = 'not configured (missing env vars)'
+    } else {
+      const { error } = await supabase.from('leads').select('id').limit(1)
+      supabaseStatus = error ? `error: ${error.message}` : 'connected'
+    }
   } catch {
     supabaseStatus = 'connection failed'
   }
