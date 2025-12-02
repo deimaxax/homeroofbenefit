@@ -87,6 +87,8 @@ export default function BenefitForm({ defaultState, defaultCity, caseRef, spotsL
   const [step, setStep] = useState(1) 
   const [zipCode, setZipCode] = useState('')
   const [streetAddress, setStreetAddress] = useState('')
+  const [addressCity, setAddressCity] = useState('')
+  const [addressState, setAddressState] = useState('')
   const [propertyIssues, setPropertyIssues] = useState<string[]>([])
   const [formData, setFormData] = useState({ name: '', phone: '' })
   
@@ -138,6 +140,8 @@ export default function BenefitForm({ defaultState, defaultCity, caseRef, spotsL
       setAddressSelected(isSelected)
       
       if (zip) setZipCode(zip)
+      if (city) setAddressCity(city)
+      if (state) setAddressState(state)
       
       // Clear error immediately if we have a selection
       if (isSelected) setError(null)
@@ -189,6 +193,8 @@ export default function BenefitForm({ defaultState, defaultCity, caseRef, spotsL
           phone: formData.phone.replace(/\D/g, ''),
           zipCode: zipCode,
           streetAddress: streetAddress,
+          city: addressCity,
+          state: addressState,
           propertyIssues: propertyIssues,
           source: 'benefit-form',
           createdAt: new Date().toISOString(),
