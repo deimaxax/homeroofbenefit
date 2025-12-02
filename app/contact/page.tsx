@@ -190,7 +190,7 @@ export default function ContactPage() {
             <div className="bg-white rounded-xl p-6 border border-slate-200">
               <h3 className="text-xl font-bold text-slate-900 mb-3">How long does the eligibility check take?</h3>
               <p className="text-slate-600 leading-relaxed">
-                Our eligibility check takes less than 2 minutes to complete. You'll receive instant preliminary results.
+                Our eligibility check takes less than 2 minutes to complete. You&apos;ll receive instant preliminary results.
               </p>
             </div>
 

@@ -24,7 +24,7 @@ const generateItems = () => {
       id: `REF-${id}`,
       action: action.text,
       color: action.color,
-      // Mobiliame rodome mažiau teksto detalių, jei reikia, bet čia svarbu skaičiai
+      // Mobile displays less text details but numbers are important
       detail: action.text.includes("RELEASED") ? amount : `Ref #${id}`, 
       loc: loc,
       time: `${time}m` // Sutrumpinta 'ago'
@@ -74,7 +74,7 @@ export default function LiveTicker() {
             <span className="text-[9px] sm:text-[10px] font-mono text-slate-200 font-medium">
               {item.detail} <span className="text-slate-500">({item.loc})</span>
             </span>
-            <span className="ml-4 sm:ml-8 text-slate-800 text-[8px] opacity-50">///</span>
+            <span className="ml-4 sm:ml-8 text-slate-800 text-[8px] opacity-50">{'///'}</span>
           </div>
         ))}
       </div>

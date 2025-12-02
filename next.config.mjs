@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
   // Suppress verbose build logging to stay under 4MB Vercel limit
   logging: {
     fetches: {

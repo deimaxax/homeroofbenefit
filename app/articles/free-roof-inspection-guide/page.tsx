@@ -176,7 +176,7 @@ export default function FreeRoofInspectionGuide({ searchParams }: { searchParams
         <div className="prose prose-lg max-w-none">
           <h2 className="text-3xl font-black text-slate-900 mt-12 mb-6">Why Free Roof Inspections Exist</h2>
           <p className="text-slate-700 leading-relaxed mb-6">
-            You might wonder: "If it's truly free, what's the catch?" Here's the truth: roofing contractors offer free inspections because <strong>most homeowners don't realize they have claimable damage</strong>.
+            You might wonder: &quot;If it&apos;s truly free, what&apos;s the catch?&quot; Here&apos;s the truth: roofing contractors offer free inspections because <strong>most homeowners don&apos;t realize they have claimable damage</strong>.
           </p>
           
           <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">

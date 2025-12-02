@@ -40,7 +40,7 @@ const SystemAuditLog = ({ address, city, onComplete }: { address: string, city: 
       }
     }, 800)
     return () => clearInterval(interval)
-  }, [])
+  }, [onComplete, steps.length])
 
   return (
     <div className="bg-[#0f172a] border border-slate-700 rounded-lg p-5 w-full">

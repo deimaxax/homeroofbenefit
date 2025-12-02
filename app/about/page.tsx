@@ -29,10 +29,10 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-slate-900 mb-6">Our Mission</h2>
           <p className="text-xl text-slate-700 leading-relaxed mb-6">
-            At Home Roof Program, we believe every homeowner deserves access to the restoration benefits they've earned. Our mission is to simplify the complex process of identifying, applying for, and securing housing restoration benefits.
+            At Home Roof Program, we believe every homeowner deserves access to the restoration benefits they&apos;ve earned. Our mission is to simplify the complex process of identifying, applying for, and securing housing restoration benefits.
           </p>
           <p className="text-xl text-slate-700 leading-relaxed">
-            We've helped over 50,000 homeowners across 9 states recover more than $2.4 billion in benefits, making us one of the most trusted names in housing restoration assistance.
+            We&apos;ve helped over 50,000 homeowners across 9 states recover more than $2.4 billion in benefits, making us one of the most trusted names in housing restoration assistance.
           </p>
         </div>
       </section>
@@ -49,7 +49,7 @@ export default function AboutPage() {
               We started with a simple idea: create a free, easy-to-use platform that helps homeowners understand their eligibility and connects them with qualified professionals who can help them through the claims process.
             </p>
             <p>
-              Today, we've grown into a comprehensive resource for homeowners across the United States, offering eligibility checks, contractor referrals, educational content, and personalized support throughout the entire restoration journey.
+              Today, we&apos;ve grown into a comprehensive resource for homeowners across the United States, offering eligibility checks, contractor referrals, educational content, and personalized support throughout the entire restoration journey.
             </p>
           </div>
         </div>

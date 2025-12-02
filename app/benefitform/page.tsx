@@ -87,7 +87,7 @@ export default function BenefitFormPage({ searchParams }: { searchParams?: { cit
                 
                 <p className="text-base sm:text-xl text-slate-400 leading-relaxed mb-8 max-w-2xl drop-shadow-lg">
                   Homeowners in <span className="text-white font-semibold border-b border-emerald-500/50">{city}</span> are currently eligible to check for <strong>unclaimed policy allowances</strong>. 
-                  <span className="block mt-2 text-sm text-slate-500">Don't pay out-of-pocket expenses before verifying your status.</span>
+                  <span className="block mt-2 text-sm text-slate-500">Don&apos;t pay out-of-pocket expenses before verifying your status.</span>
                 </p>
 
                 {/* Data Grid */}
@@ -160,7 +160,7 @@ export default function BenefitFormPage({ searchParams }: { searchParams?: { cit
                     <span className="text-emerald-600 font-bold uppercase tracking-wider text-xs mb-2 block">Standard Operating Procedure</span>
                     <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">How The Allowance Process Works</h2>
                     <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-                        This is not a discount or a coupon. We help you trigger the coverage provisions you are already paying for in your homeowner's policy.
+                      This is not a discount or a coupon. We help you trigger the coverage provisions you are already paying for in your homeowner&apos;s policy.
                     </p>
                 </div>
 
@@ -190,7 +190,7 @@ export default function BenefitFormPage({ searchParams }: { searchParams?: { cit
                     <div>
                         <h4 className="text-white font-bold mb-3 uppercase tracking-wider">Legal Disclaimer</h4>
                         <p className="leading-relaxed opacity-70">
-                            This portal is a referral service connecting homeowners with licensed independent adjusters and restoration contractors. "Allowance" refers to potential insurance policy benefits. Not a government agency.
+                          This portal is a referral service connecting homeowners with licensed independent adjusters and restoration contractors. &quot;Allowance&quot; refers to potential insurance policy benefits. Not a government agency.
                         </p>
                     </div>
                     <div>

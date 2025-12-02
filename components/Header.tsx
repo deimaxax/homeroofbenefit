@@ -31,13 +31,12 @@ export default function Header() {
              <div className="w-9 h-9 bg-gradient-to-br from-emerald-800 to-emerald-950 rounded border border-emerald-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.2)] group-hover:scale-105 transition-transform">
                 <ShieldCheck className="w-5 h-5 text-emerald-500" />
              </div>
-             {/* Status Dot */}
              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[#0B1120]"></div>
           </div>
           
           <div className="flex flex-col">
             <span className="font-bold text-white text-sm tracking-tight font-mono leading-none">
-              HRP <span className="text-emerald-600 mx-1">///</span> PORTAL
+              HRP <span className="text-emerald-600 mx-1">{'///'}</span> PORTAL
             </span>
             <span className="text-[10px] text-slate-500 uppercase tracking-widest font-medium mt-1">
               Official Review System
@@ -50,7 +49,6 @@ export default function Header() {
           
           <div className="flex flex-col items-end">
              <div className="flex items-center gap-1.5 mb-0.5">
-                {/* Green Pulsing Dot */}
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>

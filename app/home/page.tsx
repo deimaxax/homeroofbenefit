@@ -138,7 +138,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">Instant Analysis</h3>
                 <p className="text-slate-400 leading-relaxed text-sm">
-                  We use real-time NOAA weather data to establish a "Date of Loss" for your property, a requirement for any successful claim.
+                  We use real-time NOAA weather data to establish a &quot;Date of Loss&quot; for your property, a requirement for any successful claim.
                 </p>
               </div>
 
@@ -160,7 +160,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">Licensed Network</h3>
                 <p className="text-slate-400 leading-relaxed text-sm">
-                  We filter out "storm chasers". You are connected only with A+ rated, state-licensed contractors who understand insurance law.
+                  We filter out &quot;storm chasers&quot;. You are connected only with A+ rated, state-licensed contractors who understand insurance law.
                 </p>
               </div>
             </div>
@@ -206,7 +206,7 @@ export default function HomePage() {
               Allowance Deadlines May Apply.
             </h2>
             <p className="text-xl text-slate-400 mb-10 leading-relaxed">
-              Insurance policies have strict time limits on filing claims after a storm event. <br className="hidden md:block"/>Check your property's eligibility before the window closes.
+              Insurance policies have strict time limits on filing claims after a storm event. <br className="hidden md:block"/>Check your property&apos;s eligibility before the window closes.
             </p>
             <Link href="/benefitform">
               <Button
@@ -227,7 +227,7 @@ export default function HomePage() {
         <footer className="py-8 bg-[#0B1120] border-t border-slate-800 text-center">
             <div className="max-w-4xl mx-auto px-4">
                 <p className="text-xs text-slate-600 leading-relaxed">
-                    Home Roof Program is a referral service. We connect homeowners with licensed contractors and public adjusters. We do not provide insurance or legal advice. "Allowance" refers to potential policy benefits, not government funds.
+                    Home Roof Program is a referral service. We connect homeowners with licensed contractors and public adjusters. We do not provide insurance or legal advice. &quot;Allowance&quot; refers to potential policy benefits, not government funds.
                 </p>
                 <div className="flex justify-center gap-6 mt-4 text-xs text-slate-500">
                     <Link href="/privacy" className="hover:text-emerald-400">Privacy</Link>

@@ -26,7 +26,7 @@ export default function PartnersPage() {
             </p>
             <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-700">
               <li><strong>Licensed</strong> – Hold valid contractor licenses in your state</li>
-              <li><strong>Insured</strong> – Carry liability insurance and workers' compensation</li>
+              <li><strong>Insured</strong> – Carry liability insurance and workers&apos; compensation</li>
               <li><strong>Experienced</strong> – Specialize in storm damage and insurance claims</li>
               <li><strong>Local</strong> – Operate in your geographic area</li>
             </ul>
@@ -110,7 +110,7 @@ export default function PartnersPage() {
                 <strong>Email:</strong> support@homeroofprogram.com
               </p>
               <p className="text-slate-700">
-                <strong>Subject line:</strong> "STOP - [Your Phone Number]"
+                <strong>Subject line:</strong> &quot;STOP - [Your Phone Number]&quot;
               </p>
               <p className="text-slate-500 text-sm mt-4">
                 Opt-out requests are processed within 24-48 hours. You may also tell any contractor 
