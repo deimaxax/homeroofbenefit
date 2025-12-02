@@ -15,7 +15,7 @@ import mapImage from '../images/mapas.png'
 export default function BenefitFormPage({ searchParams }: { searchParams?: { city?: string, state?: string, county?: string } }) {
   const headersList = headers()
 
-  // DATA EXTRACTION
+  // DATA EXTRACTION - Priority: URL params > Headers > Fallback
   const city = searchParams?.city || headersList.get('x-user-city') || 'Your Area'
   const region = searchParams?.state || headersList.get('x-user-region') || 'US'
   
@@ -93,12 +93,12 @@ export default function BenefitFormPage({ searchParams }: { searchParams?: { cit
                 {/* Data Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-slate-800/40 border border-slate-800/60 rounded-lg overflow-hidden mb-8 shadow-xl backdrop-blur-md">
                     <div className="bg-[#0f1623]/60 p-4 text-center sm:text-left">
-                        <div className="text-xl sm:text-2xl font-mono font-bold text-white mb-1">$17.450+</div>
-                        <div className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Potential Allowance</div>
+                        <div className="text-xl sm:text-2xl font-mono font-bold text-white mb-1">99%</div>
+                        <div className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">PROJECTED COVERAGE</div>
                     </div>
                     <div className="bg-[#0f1623]/60 p-4 text-center sm:text-left">
-                        <div className="text-xl sm:text-2xl font-mono font-bold text-emerald-400 mb-1">Up to 99%</div>
-                        <div className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">PROJECTED COVERAGE</div>
+                        <div className="text-xl sm:text-2xl font-mono font-bold text-emerald-400 mb-1">$17.450+</div>
+                        <div className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Potential Allowance</div>
                     </div>
                     <div className="bg-[#0f1623]/60 p-4 hidden md:block">
                         <div className="text-2xl font-mono font-bold text-white mb-1">100%</div>
