@@ -67,12 +67,12 @@
 ```typescript
 {
   depth: 50, // percent
-  page: "/benefitform"
+  page: "/findallowance"
 }
 ```
 **Implementacija**:
 ```typescript
-// Add to app/benefitform/page.tsx
+// Add to app/findallowance/page.tsx
 import { initScrollTracking } from '@/lib/analytics'
 
 useEffect(() => {

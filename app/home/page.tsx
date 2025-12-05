@@ -65,7 +65,7 @@ export default function HomePage() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/benefitform" className="w-full sm:w-auto">
+              <Link href="/contact" className="w-full sm:w-auto">
                 <Button
                   size="xl"
                   className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-lg font-bold rounded-xl shadow-lg shadow-emerald-900/40 border border-white/10"
@@ -209,7 +209,7 @@ export default function HomePage() {
             <p className="text-xl text-slate-400 mb-10 leading-relaxed">
               Insurance policies have strict time limits on filing claims after a storm event. <br className="hidden md:block"/>Check your property&apos;s eligibility before the window closes.
             </p>
-            <Link href="/benefitform">
+            <Link href="/findallowance">
               <Button
                 size="xl"
                 className="bg-emerald-600 hover:bg-emerald-500 text-white px-12 py-8 text-xl font-bold rounded-xl shadow-2xl shadow-emerald-900/50"

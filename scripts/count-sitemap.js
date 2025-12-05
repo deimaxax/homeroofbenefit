@@ -59,7 +59,7 @@ allCities.forEach(item => {
   }
 });
 
-const staticPages = 8; // home, benefitform, articles, privacy, terms, contact, about, + root
+const staticPages = 8; // home, findallowance, articles, privacy, terms, contact, about, + root
 const statePages = 9;
 const genericArticles = 5;
 const stateArticles = 9 * 5; // 9 states × 5 articles

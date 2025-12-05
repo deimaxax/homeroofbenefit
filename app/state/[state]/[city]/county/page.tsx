@@ -190,7 +190,7 @@ export default function CountyPage({ params }: Props) {
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ')
-    redirect(`/benefitform?city=${encodeURIComponent(cityName)}&state=${encodeURIComponent(stateName)}`)
+    redirect(`/findallowance?city=${encodeURIComponent(cityName)}&state=${encodeURIComponent(stateName)}`)
   }
 
   return (
@@ -260,7 +260,7 @@ export default function CountyPage({ params }: Props) {
             {countyData.cities.map((city: string, index: number) => (
               <Link 
                 key={index}
-                href={`/benefitform?city=${encodeURIComponent(city)}&state=${encodeURIComponent(stateName)}`}
+                href={`/findallowance?city=${encodeURIComponent(city)}&state=${encodeURIComponent(stateName)}`}
                 className="group"
               >
                 <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 shadow-sm hover:shadow-lg">
@@ -311,7 +311,7 @@ export default function CountyPage({ params }: Props) {
             <p className="text-gray-700 text-lg mb-6 font-semibold">
               Not sure which city? Check eligibility for the entire county
             </p>
-            <Link href={`/benefitform?state=${encodeURIComponent(stateName)}`}>
+            <Link href={`/findallowance?state=${encodeURIComponent(stateName)}`}>
               <Button 
                 size="lg"
                 className="bg-blue-700 hover:bg-blue-800 text-white px-10 py-7 text-xl font-black rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300"

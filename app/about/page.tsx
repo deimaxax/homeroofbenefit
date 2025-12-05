@@ -137,7 +137,7 @@ export default function AboutPage() {
             Join thousands of homeowners who have successfully claimed their benefits
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/benefitform">
+            <Link href="/findallowance">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-slate-100 px-8 py-6 text-lg rounded-xl shadow-lg">
                 Check Your Eligibility
               </Button>

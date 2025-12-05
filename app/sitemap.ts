@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
     '',
     '/home',
-    '/benefitform',
+    '/findallowance',
     '/articles',
     '/privacy',
     '/terms',

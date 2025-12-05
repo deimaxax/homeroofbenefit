@@ -1,4 +1,4 @@
-// app/benefitform/page.tsx
+// app/findallowance/page.tsx
 
 import { headers } from 'next/headers'
 import BenefitForm from '@/components/BenefitForm'
@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { ShieldCheck, Lock, Activity, Database, CheckCircle2 } from 'lucide-react'
 
 // 1. IMPORTUOJAME NUOTRAUKĄ (SVARBU)
-// ".." reiškia išeiti iš "benefitform" aplanko į "app", tada į "images"
+// ".." reiškia išeiti iš "findallowance" aplanko į "app", tada į "images"
 import mapImage from '../images/mapas.png'
 
 export default function BenefitFormPage({ searchParams }: { searchParams?: { city?: string, state?: string, county?: string } }) {

@@ -10,7 +10,7 @@ export default function PartnersPage() {
   return (
     <main className="min-h-screen bg-slate-50">
       <div className="max-w-4xl mx-auto px-4 py-16">
-        <Link href="/benefitform" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-8">
+        <Link href="/findallowance" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-8">
           ← Back to Eligibility Check
         </Link>
 
