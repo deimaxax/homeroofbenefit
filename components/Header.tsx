@@ -36,10 +36,10 @@ export default function Header() {
           
           <div className="flex flex-col justify-center">
             <span className="font-bold text-white text-xs sm:text-sm tracking-tight font-mono leading-none">
-              HRP <span className="text-emerald-600 mx-0.5 sm:mx-1">{'///'}</span> PORTAL
+              HRP <span className="text-emerald-600 mx-0.5 sm:mx-1">{'///'}</span> FINDER
             </span>
             <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase tracking-widest font-medium mt-0.5 sm:mt-1 leading-none">
-              Official Review System
+              National Allowance Program
             </span>
           </div>
         </Link>

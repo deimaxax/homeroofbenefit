@@ -114,7 +114,7 @@ export default function BenefitFormPage({ searchParams }: { searchParams?: { cit
                     {/* Header: Portal Look */}
                     <div className="bg-[#1f2937] border-b border-slate-700 p-4 flex justify-between items-center">
                         <div>
-                             <p className="text-[9px] text-slate-400 uppercase tracking-wider font-bold mb-0.5">Reference File ID</p>
+                             <p className="text-[9px] text-slate-400 uppercase tracking-wider font-bold mb-0.5">Claim File ID</p>
                              <div className="flex items-center gap-2">
                                 <span className="font-mono text-white font-bold tracking-wide bg-black/30 px-2 py-0.5 rounded border border-white/5">{caseRef}</span>
                             </div>
