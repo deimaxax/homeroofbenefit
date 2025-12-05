@@ -213,6 +213,15 @@ export default function BenefitForm({ defaultState, defaultCity, caseRef, spotsL
         address: streetAddress 
       })
       
+      // Fire Facebook Pixel Lead event
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead', {
+          content_name: 'Roof Program Lead',
+          value: 1.00,
+          currency: 'USD'
+        })
+      }
+      
       setIsSubmitted(true)
     } catch (err) {
       console.error('Lead submission error:', err)
