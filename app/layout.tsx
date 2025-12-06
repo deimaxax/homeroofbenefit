@@ -37,6 +37,23 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <noscript>
+          <img height="1" width="1" style={{display: 'none'}}
+            src="https://www.facebook.com/tr?id=1174860684795377&ev=PageView&noscript=1"
+          />
+        </noscript>
+      </head>
+      
+      {/* 
+         FIX:
+         1. bg-[#0B1120] -> Nustato tamsų pagrindą visai aplikacijai.
+         2. text-slate-200 -> Užtikrina, kad tekstas būtų įskaitomas.
+         3. selection:bg-emerald-500/30 -> Premium jausmas žymint tekstą.
+      */}
+      <body className={cn(
+        "min-h-screen bg-[#0B1120] text-slate-200 font-sans antialiased selection:bg-emerald-500/30", 
+        inter.variable
+      )}>
         {/* Microsoft Clarity */}
         <Script id="clarity-script" strategy="afterInteractive">
           {`(function(c,l,a,r,i,t,y){
@@ -77,23 +94,6 @@ export default function RootLayout({
             fbq('track', 'PageView');
           `}
         </Script>
-        <noscript>
-          <img height="1" width="1" style={{display: 'none'}}
-            src="https://www.facebook.com/tr?id=1174860684795377&ev=PageView&noscript=1"
-          />
-        </noscript>
-      </head>
-      
-      {/* 
-         FIX:
-         1. bg-[#0B1120] -> Nustato tamsų pagrindą visai aplikacijai.
-         2. text-slate-200 -> Užtikrina, kad tekstas būtų įskaitomas.
-         3. selection:bg-emerald-500/30 -> Premium jausmas žymint tekstą.
-      */}
-      <body className={cn(
-        "min-h-screen bg-[#0B1120] text-slate-200 font-sans antialiased selection:bg-emerald-500/30", 
-        inter.variable
-      )}>
         
         <Header />
         
