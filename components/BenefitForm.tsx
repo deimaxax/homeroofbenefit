@@ -213,12 +213,14 @@ export default function BenefitForm({ defaultState, defaultCity, caseRef, spotsL
         address: streetAddress 
       })
       
-      // Fire Facebook Pixel Lead event
+      // Fire Facebook Pixel Lead event with deduplication
       if (typeof window !== 'undefined' && (window as any).fbq) {
         (window as any).fbq('track', 'Lead', {
           content_name: 'Roof Program Lead',
           value: 1.00,
           currency: 'USD'
+        }, {
+          eventID: `lead_${data.leadId}_${Date.now()}`
         })
       }
       
